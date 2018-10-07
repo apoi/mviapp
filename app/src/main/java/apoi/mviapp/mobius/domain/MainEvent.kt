@@ -1,3 +1,8 @@
 package apoi.mviapp.mobius.domain
 
-class MainEvent
+sealed class MainEvent
+
+class LoadButtonClicked : MainEvent()
+class PhotoClicked : MainEvent()
+class ItemLoadSuccess : MainEvent()
+class ItemLoadError(error: String) : MainEvent()

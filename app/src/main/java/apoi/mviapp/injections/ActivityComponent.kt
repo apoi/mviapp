@@ -1,5 +1,6 @@
 package apoi.mviapp.injections
 
+import apoi.mviapp.mobius.MainActivity
 import dagger.Subcomponent
 
 @ActivityScope
@@ -7,4 +8,6 @@ import dagger.Subcomponent
 interface ActivityComponent {
 
     fun plusFragment(fragmentModule: FragmentModule): FragmentComponent
+
+    fun inject(activity: MainActivity)
 }

@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import apoi.mviapp.core.BaseFragment
 import apoi.mviapp.mobius.domain.MainEffect
 import apoi.mviapp.mobius.domain.MainEvent
 import apoi.mviapp.mobius.domain.MainLogic
@@ -17,16 +18,22 @@ import com.spotify.mobius.android.AndroidLogger
 import com.spotify.mobius.android.MobiusAndroid
 import com.spotify.mobius.rx2.RxMobius
 import io.reactivex.ObservableTransformer
+import javax.inject.Inject
 
-class MainFragment : Fragment() {
+class MainFragment : BaseFragment() {
+
+    @Inject
+    internal lateinit var mainEffectHandlers: MainEffectHandlers
 
     private val mainLogic = MainLogic()
-
-    private val mainEffectHandlers = MainEffectHandlers()
 
     private lateinit var mainView: MainView
 
     private lateinit var controller: MobiusLoop.Controller<MainModel, MainEvent>
+
+    override fun inject() {
+        getComponent().inject(this)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return MainView(inflater, container).also {

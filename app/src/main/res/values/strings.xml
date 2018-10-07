@@ -1,3 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="app_name">mvi-app</string>
+
+    <!-- Network -->
+    <string name="server_error">Failed, something is fishy with the service!</string>
+    <string name="network_error">Network error. Check your connection and try again.</string>
+    <string name="unknown_error">Unknown error. Try again later.</string>
+
 </resources>
