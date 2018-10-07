@@ -10,6 +10,7 @@ import apoi.mviapp.network.InstantAdapter
 import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
+import okhttp3.Cache
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -47,8 +48,9 @@ class ApplicationModule(private val application: Application) {
 
     @Provides
     @Singleton
-    internal fun provideOkHttpClient(): OkHttpClient {
+    internal fun provideOkHttpClient(@ForApplication context: Context): OkHttpClient {
         return OkHttpClient.Builder()
+            .cache(Cache(context.cacheDir, 10 * 1024 * 1024))
             .build()
     }
 

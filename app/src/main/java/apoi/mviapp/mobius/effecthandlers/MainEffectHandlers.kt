@@ -41,9 +41,9 @@ class MainEffectHandlers @Inject constructor(
         return effects
             .subscribeOn(Schedulers.io())
             .flatMap {
-                api.getUser()
+                api.getPhotos()
                     .toObservable()
-                    .map<MainEvent> { ItemLoadSuccess() }
+                    .map<MainEvent> { ItemLoadSuccess(it) }
                     .onErrorReturn {
                         ItemLoadError(ErrorMapper(context, it).errorToMessage())
                     }

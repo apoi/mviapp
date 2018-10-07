@@ -17,9 +17,20 @@ class MainLogic {
                         )
                     )
                 }
+                is ItemLoadSuccess -> {
+                    Next.next(
+                        model.copy(inProgress = false, photos = event.photos)
+                    )
+                }
+                is ItemLoadError -> {
+                    Next.next(
+                        model.copy(inProgress = false),
+                        Effects.effects(
+                            ShowError(event.error)
+                        )
+                    )
+                }
                 is PhotoClicked -> TODO()
-                is ItemLoadSuccess -> TODO()
-                is ItemLoadError -> TODO()
             }
         }
     }

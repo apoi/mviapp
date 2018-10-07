@@ -5,6 +5,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ProgressBar
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import apoi.mviapp.R
 import apoi.mviapp.extensions.setVisibility
@@ -26,8 +29,10 @@ class MainView(
     private val loadButton = view.findViewById<Button>(R.id.load_button)
     private val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view)
 
-    override fun connect(output: Consumer<MainEvent>): Connection<MainModel> {
+    private val photoAdapter = PhotoAdapter()
 
+    override fun connect(output: Consumer<MainEvent>): Connection<MainModel> {
+        initRecyclerView()
         setListeners(output)
 
         return object : Connection<MainModel> {
@@ -41,6 +46,18 @@ class MainView(
         }
     }
 
+    private fun initRecyclerView() {
+        recyclerView.apply {
+            layoutManager = LinearLayoutManager(context).also {
+                addItemDecoration(DividerItemDecoration(context, it.orientation).apply {
+                    setDrawable(ContextCompat.getDrawable(context, R.drawable.divider)!!)
+                })
+            }
+            adapter = photoAdapter
+            setHasFixedSize(true)
+        }
+    }
+
     private fun setListeners(output: Consumer<MainEvent>) {
         loadButton.setOnClickListener { output.accept(LoadButtonClicked()) }
     }
@@ -51,6 +68,9 @@ class MainView(
 
     private fun render(value: MainModel) {
         progressBar.setVisibility(value.inProgress)
-        loadButton.setVisibility(!value.inProgress)
+        loadButton.setVisibility(!value.inProgress && value.photos.isEmpty())
+        recyclerView.setVisibility(!value.inProgress && value.photos.isNotEmpty())
+
+        photoAdapter.setPhotos(value.photos)
     }
 }

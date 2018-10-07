@@ -7,5 +7,5 @@ import retrofit2.http.GET
 interface Api {
 
     @GET("/photos")
-    fun getUser(): Single<Photo>
+    fun getPhotos(): Single<List<Photo>>
 }
