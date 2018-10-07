@@ -1,4 +1,4 @@
-package apoi.mviapp.mobius.view
+package apoi.mviapp.mobius.list.view
 
 import android.view.View
 import android.widget.ImageView

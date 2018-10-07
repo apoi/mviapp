@@ -1,17 +1,15 @@
-package apoi.mviapp.mobius
+package apoi.mviapp.mobius.list.view
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import apoi.mviapp.core.BaseFragment
-import apoi.mviapp.mobius.domain.MainEffect
-import apoi.mviapp.mobius.domain.MainEvent
-import apoi.mviapp.mobius.domain.MainLogic
-import apoi.mviapp.mobius.domain.MainModel
-import apoi.mviapp.mobius.effecthandlers.MainEffectHandlers
-import apoi.mviapp.mobius.view.MainView
+import apoi.mviapp.mobius.list.domain.ListEffect
+import apoi.mviapp.mobius.list.domain.ListEvent
+import apoi.mviapp.mobius.list.domain.ListLogic
+import apoi.mviapp.mobius.list.domain.ListModel
+import apoi.mviapp.mobius.list.effecthandlers.ListEffectHandlers
 import com.spotify.mobius.MobiusLoop
 import com.spotify.mobius.Update
 import com.spotify.mobius.android.AndroidLogger
@@ -20,24 +18,24 @@ import com.spotify.mobius.rx2.RxMobius
 import io.reactivex.ObservableTransformer
 import javax.inject.Inject
 
-class MainFragment : BaseFragment() {
+class ListFragment : BaseFragment() {
 
     @Inject
-    internal lateinit var mainEffectHandlers: MainEffectHandlers
+    internal lateinit var listEffectHandlers: ListEffectHandlers
 
-    private val mainLogic = MainLogic()
+    private val listLogic = ListLogic()
 
-    private lateinit var mainView: MainView
+    private lateinit var listView: ListView
 
-    private lateinit var controller: MobiusLoop.Controller<MainModel, MainEvent>
+    private lateinit var controller: MobiusLoop.Controller<ListModel, ListEvent>
 
     override fun inject() {
         getComponent().inject(this)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return MainView(inflater, container).also {
-            mainView = it
+        return ListView(inflater, container).also {
+            listView = it
         }.view
     }
 
@@ -45,11 +43,11 @@ class MainFragment : BaseFragment() {
         super.onActivityCreated(savedInstanceState)
 
         controller = MobiusAndroid.controller(
-            createLoop(mainLogic.createUpdate(), mainEffectHandlers.createHandler()),
-            MainModel()
+            createLoop(listLogic.createUpdate(), listEffectHandlers.createHandler()),
+            ListModel()
         )
 
-        controller.connect(mainView)
+        controller.connect(listView)
     }
 
     override fun onResume() {
@@ -68,10 +66,10 @@ class MainFragment : BaseFragment() {
     }
 
     private fun createLoop(
-        update: Update<MainModel, MainEvent, MainEffect>,
-        effectHandler: ObservableTransformer<MainEffect, MainEvent>
-    ): MobiusLoop.Factory<MainModel, MainEvent, MainEffect> {
+        update: Update<ListModel, ListEvent, ListEffect>,
+        effectHandler: ObservableTransformer<ListEffect, ListEvent>
+    ): MobiusLoop.Factory<ListModel, ListEvent, ListEffect> {
         return RxMobius.loop(update, effectHandler)
-            .logger(AndroidLogger.tag("Main"))
+            .logger(AndroidLogger.tag("List"))
     }
 }

@@ -1,4 +1,4 @@
-package apoi.mviapp.mobius.view
+package apoi.mviapp.mobius.list.view
 
 import android.view.LayoutInflater
 import android.view.View
@@ -11,19 +11,19 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import apoi.mviapp.R
 import apoi.mviapp.extensions.setVisibility
-import apoi.mviapp.mobius.domain.LoadButtonClicked
-import apoi.mviapp.mobius.domain.MainEvent
-import apoi.mviapp.mobius.domain.MainModel
+import apoi.mviapp.mobius.list.domain.ListEvent
+import apoi.mviapp.mobius.list.domain.ListModel
+import apoi.mviapp.mobius.list.domain.LoadButtonClicked
 import com.spotify.mobius.Connectable
 import com.spotify.mobius.Connection
 import com.spotify.mobius.functions.Consumer
 
-class MainView(
+class ListView(
     inflater: LayoutInflater,
     parent: ViewGroup?
-) : Connectable<MainModel, MainEvent> {
+) : Connectable<ListModel, ListEvent> {
 
-    val view: View = inflater.inflate(R.layout.main_fragment, parent, false)
+    val view: View = inflater.inflate(R.layout.list_fragment, parent, false)
 
     private val progressBar = view.findViewById<ProgressBar>(R.id.progress_bar)
     private val loadButton = view.findViewById<Button>(R.id.load_button)
@@ -31,12 +31,12 @@ class MainView(
 
     private val photoAdapter = PhotoAdapter()
 
-    override fun connect(output: Consumer<MainEvent>): Connection<MainModel> {
+    override fun connect(output: Consumer<ListEvent>): Connection<ListModel> {
         initRecyclerView()
         setListeners(output)
 
-        return object : Connection<MainModel> {
-            override fun accept(value: MainModel) {
+        return object : Connection<ListModel> {
+            override fun accept(value: ListModel) {
                 render(value)
             }
 
@@ -58,7 +58,7 @@ class MainView(
         }
     }
 
-    private fun setListeners(output: Consumer<MainEvent>) {
+    private fun setListeners(output: Consumer<ListEvent>) {
         loadButton.setOnClickListener { output.accept(LoadButtonClicked()) }
     }
 
@@ -66,7 +66,7 @@ class MainView(
         loadButton.setOnClickListener(null)
     }
 
-    private fun render(value: MainModel) {
+    private fun render(value: ListModel) {
         progressBar.setVisibility(value.inProgress)
         loadButton.setVisibility(!value.inProgress && value.photos.isEmpty())
         recyclerView.setVisibility(!value.inProgress && value.photos.isNotEmpty())

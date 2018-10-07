@@ -1,11 +1,11 @@
-package apoi.mviapp.mobius
+package apoi.mviapp.mobius.list.view
 
 import android.os.Bundle
 import androidx.fragment.app.FragmentTransaction
 import apoi.mviapp.R
 import apoi.mviapp.core.BaseActivity
 
-class MainActivity : BaseActivity() {
+class ListActivity : BaseActivity() {
 
     override fun inject() {
         getComponent().inject(this)
@@ -14,11 +14,11 @@ class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.main_activity)
+        setContentView(R.layout.activity)
 
         supportFragmentManager
             .beginTransaction()
-            .replace(R.id.container, MainFragment())
+            .replace(R.id.container, ListFragment())
             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
             .commit()
     }
