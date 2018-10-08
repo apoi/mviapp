@@ -1,6 +1,7 @@
 package apoi.mviapp.mobius.list.view
 
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -10,6 +11,7 @@ import com.squareup.picasso.Picasso
 
 class PhotoViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
+    private val container = view.findViewById<ViewGroup>(R.id.item_container)
     private val photoView = view.findViewById<ImageView>(R.id.item_photo)
     private val title = view.findViewById<TextView>(R.id.item_title)
     private val description = view.findViewById<TextView>(R.id.item_description)
@@ -23,5 +25,9 @@ class PhotoViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         title.text = "Photo id: ${photo.id}"
         description.text = photo.title.capitalize()
+    }
+
+    fun setClickListener(listener: View.OnClickListener?) {
+        container.setOnClickListener(listener)
     }
 }

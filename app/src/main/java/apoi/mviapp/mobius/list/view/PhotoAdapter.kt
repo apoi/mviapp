@@ -1,12 +1,15 @@
 package apoi.mviapp.mobius.list.view
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import apoi.mviapp.R
 import apoi.mviapp.pojo.Photo
 
-class PhotoAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class PhotoAdapter(
+    private val clickListener: (Photo) -> Unit
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val photos = ArrayList<Photo>()
 
@@ -15,7 +18,15 @@ class PhotoAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        (holder as PhotoViewHolder).setPhoto(photos[position])
+        (holder as PhotoViewHolder).apply {
+            val photo = photos[position]
+            setPhoto(photo)
+            setClickListener(View.OnClickListener { clickListener.invoke(photo) })
+        }
+    }
+
+    override fun onViewRecycled(holder: RecyclerView.ViewHolder) {
+        (holder as PhotoViewHolder).setClickListener(null)
     }
 
     fun setPhotos(value: List<Photo>) {

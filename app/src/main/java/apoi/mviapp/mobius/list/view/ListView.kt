@@ -14,6 +14,7 @@ import apoi.mviapp.extensions.setVisibility
 import apoi.mviapp.mobius.list.domain.ListEvent
 import apoi.mviapp.mobius.list.domain.ListModel
 import apoi.mviapp.mobius.list.domain.LoadButtonClicked
+import apoi.mviapp.mobius.list.domain.PhotoClicked
 import com.spotify.mobius.Connectable
 import com.spotify.mobius.Connection
 import com.spotify.mobius.functions.Consumer
@@ -29,10 +30,10 @@ class ListView(
     private val loadButton = view.findViewById<Button>(R.id.load_button)
     private val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view)
 
-    private val photoAdapter = PhotoAdapter()
+    private lateinit var photoAdapter: PhotoAdapter
 
     override fun connect(output: Consumer<ListEvent>): Connection<ListModel> {
-        initRecyclerView()
+        initRecyclerView(output)
         setListeners(output)
 
         return object : Connection<ListModel> {
@@ -46,7 +47,9 @@ class ListView(
         }
     }
 
-    private fun initRecyclerView() {
+    private fun initRecyclerView(output: Consumer<ListEvent>) {
+        photoAdapter = PhotoAdapter { output.accept(PhotoClicked(it)) }
+
         recyclerView.apply {
             layoutManager = LinearLayoutManager(context).also {
                 addItemDecoration(DividerItemDecoration(context, it.orientation).apply {

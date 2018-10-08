@@ -30,7 +30,12 @@ class ListLogic {
                         )
                     )
                 }
-                is PhotoClicked -> TODO()
+                is PhotoClicked -> {
+                    Next.next(
+                        model,
+                        Effects.effects(ShowPhoto(event.photo))
+                    )
+                }
             }
         }
     }
