@@ -74,4 +74,10 @@ class ListFragment : MviBaseFragment<FragmentComponent, ListUiModel, ListUiEvent
 
         photoAdapter.setPhotos(model.photos)
     }
+
+    companion object {
+        fun create(): ListFragment {
+            return ListFragment()
+        }
+    }
 }
