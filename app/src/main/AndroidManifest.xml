@@ -15,6 +15,12 @@
         android:theme="@style/AppTheme">
 
         <activity
+            android:name="apoi.mviapp.mobius.photo.view.PhotoActivity"
+            android:label="@string/app_name" />
+
+        <!-- Mobius -->
+
+        <activity
             android:name="apoi.mviapp.mobius.list.view.ListActivity"
             android:label="@string/app_name">
 
@@ -24,9 +30,12 @@
             </intent-filter>
         </activity>
 
+        <!-- Freesound -->
+
         <activity
-            android:name="apoi.mviapp.mobius.photo.view.PhotoActivity"
-            android:label="@string/app_name" />
+            android:name="apoi.mviapp.freesound.list.view.ListActivity"
+            android:label="@string/app_name">
+        </activity>
 
     </application>
 
