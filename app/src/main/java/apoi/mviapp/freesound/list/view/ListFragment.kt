@@ -11,23 +11,50 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import apoi.mviapp.R
 import apoi.mviapp.extensions.setVisibility
+import apoi.mviapp.freesound.arch.Logger
+import apoi.mviapp.freesound.arch.store.Store
+import apoi.mviapp.freesound.arch.view.Flow
 import apoi.mviapp.freesound.arch.view.MviBaseFragment
+import apoi.mviapp.freesound.arch.viewmodel.BaseViewModel
 import apoi.mviapp.freesound.list.view.domain.ListFragmentViewModel
+import apoi.mviapp.freesound.list.view.domain.ListUiAction
 import apoi.mviapp.freesound.list.view.domain.ListUiEvent
 import apoi.mviapp.freesound.list.view.domain.ListUiModel
+import apoi.mviapp.freesound.list.view.domain.ListUiResult
+import apoi.mviapp.freesound.list.view.domain.dispatcher
+import apoi.mviapp.freesound.list.view.domain.eventMapper
+import apoi.mviapp.freesound.list.view.domain.reducer
 import apoi.mviapp.injections.FragmentComponent
-import apoi.mviapp.pojo.Photo
+import apoi.mviapp.network.Api
 import com.jakewharton.rxbinding2.view.clicks
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import kotlinx.android.synthetic.main.list_fragment.*
+import javax.inject.Inject
 
 class ListFragment : MviBaseFragment<FragmentComponent, ListUiModel, ListUiEvent, ListFragmentViewModel>() {
 
+    @Inject
+    lateinit var api: Api
+
     private lateinit var photoAdapter: PhotoAdapter
+
+    private lateinit var viewModel: BaseViewModel<ListUiEvent, ListUiAction, ListUiResult, ListUiModel>
 
     override fun inject() {
         getComponent().inject(this)
+
+        // TODO inject
+        viewModel = BaseViewModel(
+            ListUiEvent.Initial,
+            eventMapper,
+            dispatcher(ListLoadInteractor(api)),
+            Store(ListUiModel(), reducer, "ListStore", Logger()),
+            "ListFragment",
+            Logger()
+        )
+
+        flow = Flow(this, viewModel, this)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
@@ -63,9 +90,7 @@ class ListFragment : MviBaseFragment<FragmentComponent, ListUiModel, ListUiEvent
         .toFlowable(BackpressureStrategy.BUFFER)
 
     // TODO photo click
-    private fun photoClicked() = load_button.clicks()
-        .map { ListUiEvent.PhotoClicked(Photo("", 0, "", "", "")) }
-        .toFlowable(BackpressureStrategy.BUFFER)
+    private fun photoClicked() = Flowable.never<ListUiEvent>()
 
     override fun render(model: ListUiModel) {
         progress_bar.setVisibility(model.inProgress)
