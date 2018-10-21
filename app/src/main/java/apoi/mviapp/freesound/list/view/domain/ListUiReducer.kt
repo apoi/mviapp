@@ -8,6 +8,6 @@ val reducer: Reducer<ListUiResult, ListUiModel> =
 private fun ListUiModel.reduceModel(result: ListUiResult): ListUiModel =
     when (result) {
         is ListUiResult.NoChange -> this
-        is ListUiResult.ItemLoadSuccess -> this
+        is ListUiResult.ItemLoadSuccess -> this.copy(photos = result.photos)
         is ListUiResult.ItemLoadError -> this
     }
