@@ -1,6 +1,6 @@
 package apoi.mviapp.injections
 
-import apoi.mviapp.view.PhotoActivity
+import apoi.mviapp.photo.PhotoActivity
 import dagger.Subcomponent
 
 @ActivityScope

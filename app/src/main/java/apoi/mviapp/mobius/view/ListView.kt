@@ -15,6 +15,7 @@ import apoi.mviapp.mobius.domain.ListEvent
 import apoi.mviapp.mobius.domain.ListModel
 import apoi.mviapp.mobius.domain.LoadButtonClicked
 import apoi.mviapp.mobius.domain.PhotoClicked
+import apoi.mviapp.photo.PhotoAdapter
 import com.spotify.mobius.Connectable
 import com.spotify.mobius.Connection
 import com.spotify.mobius.functions.Consumer

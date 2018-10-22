@@ -26,7 +26,7 @@ import apoi.mviapp.freesound.arch.viewmodel.ViewModel
  *
  * @param <C> The DI component class.
  */
-abstract class MviBaseFragment<C, M : State, E : Event, VM : ViewModel<E, M>>
+abstract class MviBaseFragment<M : State, E : Event, VM : ViewModel<E, M>>
     : BaseFragment(), MviView<E, M> {
 
     internal lateinit var flow: Flow<E, M, VM>

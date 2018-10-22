@@ -1,5 +1,7 @@
 package apoi.mviapp.freesound.domain
 
+import android.content.Context
+import android.content.Intent
 import apoi.mviapp.freesound.arch.Action
 import apoi.mviapp.freesound.arch.Dispatcher
 import apoi.mviapp.freesound.arch.Event
@@ -9,6 +11,9 @@ import apoi.mviapp.freesound.arch.State
 import apoi.mviapp.freesound.arch.combine
 import apoi.mviapp.freesound.arch.viewmodel.BaseViewModel
 import apoi.mviapp.freesound.view.ListLoadInteractor
+import apoi.mviapp.network.ErrorMapper
+import apoi.mviapp.photo.PHOTO
+import apoi.mviapp.photo.PhotoActivity
 import apoi.mviapp.pojo.Photo
 
 typealias ListFragmentViewModel = BaseViewModel<ListUiEvent, ListUiAction, ListUiResult, ListUiModel>
@@ -46,7 +51,7 @@ val eventMapper: EventMapper<ListUiEvent, ListUiAction> =
         }
     }
 
-fun dispatcher(listLoadInteractor: ListLoadInteractor): Dispatcher<ListUiAction, ListUiResult> {
+fun dispatcher(context: Context, listLoadInteractor: ListLoadInteractor): Dispatcher<ListUiAction, ListUiResult> {
 
     val initial = Dispatcher<ListUiAction, ListUiResult> {
         it.ofType(ListUiAction.Initial::class.java)
@@ -56,9 +61,20 @@ fun dispatcher(listLoadInteractor: ListLoadInteractor): Dispatcher<ListUiAction,
     val loadList = Dispatcher<ListUiAction, ListUiResult> {
         it.ofType(ListUiAction.LoadContent::class.java)
             .flatMap { listLoadInteractor.loadList().toFlowable() }
-            .map { ListUiResult.ItemLoadSuccess(it) }
+            .map<ListUiResult> { ListUiResult.ItemLoadSuccess(it) }
+            .onErrorReturn { ListUiResult.ItemLoadError("Error!") }
     }
 
-    return combine(initial, loadList)
+    val showPhoto = Dispatcher<ListUiAction, ListUiResult> {
+        it.ofType(ListUiAction.ShowPhoto::class.java)
+            .doOnNext {
+                context.startActivity(Intent(context, PhotoActivity::class.java).apply {
+                    putExtra(PHOTO, it.photo.url)
+                })
+            }
+            .map { ListUiResult.NoChange }
+    }
+
+    return combine(initial, loadList, showPhoto)
 }
 

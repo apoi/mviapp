@@ -17,7 +17,7 @@
         tools:ignore="GoogleAppIndexingWarning">
 
         <activity
-            android:name="apoi.mviapp.view.PhotoActivity"
+            android:name="apoi.mviapp.photo.PhotoActivity"
             android:label="@string/app_name" />
 
         <!-- Mobius -->

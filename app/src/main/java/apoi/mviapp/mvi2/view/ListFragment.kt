@@ -14,6 +14,7 @@ import apoi.mviapp.mvi2.domain.ListEvent
 import apoi.mviapp.mvi2.domain.ListResult
 import apoi.mviapp.mvi2.domain.ListState
 import apoi.mviapp.network.Api
+import apoi.mviapp.photo.PhotoAdapter
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.list_fragment.*
 import javax.inject.Inject

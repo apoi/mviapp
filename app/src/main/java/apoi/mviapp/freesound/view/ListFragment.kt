@@ -16,28 +16,25 @@ import apoi.mviapp.freesound.arch.store.Store
 import apoi.mviapp.freesound.arch.view.Flow
 import apoi.mviapp.freesound.arch.view.MviBaseFragment
 import apoi.mviapp.freesound.arch.viewmodel.BaseViewModel
-import apoi.mviapp.freesound.domain.ListFragmentViewModel
-import apoi.mviapp.freesound.domain.ListUiAction
-import apoi.mviapp.freesound.domain.ListUiEvent
-import apoi.mviapp.freesound.domain.ListUiModel
-import apoi.mviapp.freesound.domain.ListUiResult
-import apoi.mviapp.freesound.domain.dispatcher
-import apoi.mviapp.freesound.domain.eventMapper
-import apoi.mviapp.freesound.domain.reducer
-import apoi.mviapp.injections.FragmentComponent
+import apoi.mviapp.freesound.domain.*
 import apoi.mviapp.network.Api
+import apoi.mviapp.photo.PhotoAdapter
+import apoi.mviapp.pojo.Photo
 import com.jakewharton.rxbinding2.view.clicks
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
+import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.list_fragment.*
 import javax.inject.Inject
 
-class ListFragment : MviBaseFragment<FragmentComponent, ListUiModel, ListUiEvent, ListFragmentViewModel>() {
+class ListFragment : MviBaseFragment<ListUiModel, ListUiEvent, ListFragmentViewModel>() {
 
     @Inject
     lateinit var api: Api
 
-    private lateinit var photoAdapter: PhotoAdapter
+    private val photoClickedSubject = PublishSubject.create<Photo>()
+
+    private val photoAdapter = PhotoAdapter { photo -> photoClickedSubject.onNext(photo) }
 
     private lateinit var viewModel: BaseViewModel<ListUiEvent, ListUiAction, ListUiResult, ListUiModel>
 
@@ -48,7 +45,7 @@ class ListFragment : MviBaseFragment<FragmentComponent, ListUiModel, ListUiEvent
         viewModel = BaseViewModel(
             ListUiEvent.Initial,
             eventMapper,
-            dispatcher(ListLoadInteractor(api)),
+            dispatcher(requireContext(), ListLoadInteractor(api)),
             Store(ListUiModel(), reducer, "ListStore", Logger()),
             "ListFragment",
             Logger()
@@ -67,8 +64,6 @@ class ListFragment : MviBaseFragment<FragmentComponent, ListUiModel, ListUiEvent
     }
 
     private fun initRecyclerView() {
-        photoAdapter = PhotoAdapter({})
-
         recycler_view.apply {
             layoutManager = LinearLayoutManager(context).also {
                 addItemDecoration(DividerItemDecoration(context, it.orientation).apply {
@@ -89,8 +84,9 @@ class ListFragment : MviBaseFragment<FragmentComponent, ListUiModel, ListUiEvent
         .map { ListUiEvent.LoadButtonClicked }
         .toFlowable(BackpressureStrategy.BUFFER)
 
-    // TODO photo click
-    private fun photoClicked() = Flowable.never<ListUiEvent>()
+    private fun photoClicked() = photoClickedSubject
+        .map { ListUiEvent.PhotoClicked(it) }
+        .toFlowable(BackpressureStrategy.BUFFER)
 
     override fun render(model: ListUiModel) {
         progress_bar.setVisibility(model.inProgress)

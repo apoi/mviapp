@@ -1,4 +1,4 @@
-package apoi.mviapp.view
+package apoi.mviapp.photo
 
 import android.os.Bundle
 import android.view.Window

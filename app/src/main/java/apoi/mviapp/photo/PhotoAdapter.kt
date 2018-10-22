@@ -1,4 +1,4 @@
-package apoi.mviapp.freesound.view
+package apoi.mviapp.photo
 
 import android.view.LayoutInflater
 import android.view.View
