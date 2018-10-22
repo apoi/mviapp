@@ -22,7 +22,7 @@ import apoi.mviapp.freesound.arch.State
 import apoi.mviapp.freesound.arch.viewmodel.ViewModel
 
 /**
- * A base Fragment which provides the binding mechanism hooks to a MviView Model.
+ * A base Fragment which provides the binding mechanism hooks to a MviView ViewModel.
  *
  * @param <C> The DI component class.
  */

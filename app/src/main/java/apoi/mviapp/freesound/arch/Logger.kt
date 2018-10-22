@@ -26,7 +26,7 @@ class Logger {
             is LogEvent.Action -> Timber.d("MVI|$tag| Action => $logEvent")
             is LogEvent.Result -> Timber.d("MVI|$tag| Result => $logEvent")
             is LogEvent.Reduce -> Timber.d("MVI|$tag| Reduce => $logEvent")
-            is LogEvent.State -> Timber.d("MVI|$tag| State => $logEvent")
+            is LogEvent.State -> Timber.d("MVI|$tag| ViewState => $logEvent")
             is LogEvent.Error -> Timber.e(logEvent.throwable, "MVI|$tag| Fatal Error => $logEvent")
         }
     }
