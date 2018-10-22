@@ -27,7 +27,7 @@ import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.list_fragment.*
 import javax.inject.Inject
 
-class ListFragment : MviBaseFragment<ListUiModel, ListUiEvent, ListFragmentViewModel>() {
+class ListFragment : MviBaseFragment<ListState, ListEvent, ListFragmentViewModel>() {
 
     @Inject
     lateinit var api: Api
@@ -36,17 +36,17 @@ class ListFragment : MviBaseFragment<ListUiModel, ListUiEvent, ListFragmentViewM
 
     private val photoAdapter = PhotoAdapter { photo -> photoClickedSubject.onNext(photo) }
 
-    private lateinit var viewModel: BaseViewModel<ListUiEvent, ListUiAction, ListUiResult, ListUiModel>
+    private lateinit var viewModel: BaseViewModel<ListEvent, ListAction, ListResult, ListState>
 
     override fun inject() {
         getComponent().inject(this)
 
         // TODO inject
         viewModel = BaseViewModel(
-            ListUiEvent.Initial,
+            ListEvent.Initial,
             eventMapper,
             dispatcher(requireContext(), ListLoadInteractor(api)),
-            Store(ListUiModel(), reducer, "ListStore", Logger()),
+            Store(ListState(), reducer, "ListStore", Logger()),
             "ListFragment",
             Logger()
         )
@@ -75,25 +75,25 @@ class ListFragment : MviBaseFragment<ListUiModel, ListUiEvent, ListFragmentViewM
         }
     }
 
-    override fun uiEvents(): LiveData<ListUiEvent> {
+    override fun events(): LiveData<ListEvent> {
         return LiveDataReactiveStreams.fromPublisher(
             Flowable.merge(loadRequested(), photoClicked()))
     }
 
     private fun loadRequested() = load_button.clicks()
-        .map { ListUiEvent.LoadButtonClicked }
+        .map { ListEvent.LoadButtonClicked }
         .toFlowable(BackpressureStrategy.BUFFER)
 
     private fun photoClicked() = photoClickedSubject
-        .map { ListUiEvent.PhotoClicked(it) }
+        .map { ListEvent.PhotoClicked(it) }
         .toFlowable(BackpressureStrategy.BUFFER)
 
-    override fun render(model: ListUiModel) {
-        progress_bar.setVisibility(model.inProgress)
-        load_button.setVisibility(!model.inProgress && model.photos.isEmpty())
-        recycler_view.setVisibility(!model.inProgress && model.photos.isNotEmpty())
+    override fun render(state: ListState) {
+        progress_bar.setVisibility(state.inProgress)
+        load_button.setVisibility(!state.inProgress && state.photos.isEmpty())
+        recycler_view.setVisibility(!state.inProgress && state.photos.isNotEmpty())
 
-        photoAdapter.setPhotos(model.photos)
+        photoAdapter.setPhotos(state.photos)
     }
 
     companion object {

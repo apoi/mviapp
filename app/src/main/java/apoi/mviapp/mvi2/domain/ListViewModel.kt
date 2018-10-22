@@ -39,7 +39,6 @@ class ListViewModel : ViewModel<ListEvent, ListState, ListAction, ListResult>, a
             actions.publish { shared: Observable<ListAction> ->
                 shared.ofType(ListAction.SkipAction::class.java)
                     .map<ListResult> { ListResult.SkipResult }
-
             }
         }
     }

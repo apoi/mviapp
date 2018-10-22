@@ -11,68 +11,67 @@ import apoi.mviapp.freesound.arch.State
 import apoi.mviapp.freesound.arch.combine
 import apoi.mviapp.freesound.arch.viewmodel.BaseViewModel
 import apoi.mviapp.freesound.view.ListLoadInteractor
-import apoi.mviapp.network.ErrorMapper
 import apoi.mviapp.photo.PHOTO
 import apoi.mviapp.photo.PhotoActivity
 import apoi.mviapp.pojo.Photo
 
-typealias ListFragmentViewModel = BaseViewModel<ListUiEvent, ListUiAction, ListUiResult, ListUiModel>
+typealias ListFragmentViewModel = BaseViewModel<ListEvent, ListAction, ListResult, ListState>
 
-sealed class ListUiEvent : Event {
-    object Initial : ListUiEvent()
-    object LoadButtonClicked : ListUiEvent()
-    data class PhotoClicked(val photo: Photo) : ListUiEvent()
+sealed class ListEvent : Event {
+    object Initial : ListEvent()
+    object LoadButtonClicked : ListEvent()
+    data class PhotoClicked(val photo: Photo) : ListEvent()
 }
 
-sealed class ListUiResult : Result {
-    object NoChange : ListUiResult()
-    data class ItemLoadSuccess(val photos: List<Photo>) : ListUiResult()
-    data class ItemLoadError(val error: String) : ListUiResult()
+sealed class ListResult : Result {
+    object NoChange : ListResult()
+    data class ItemLoadSuccess(val photos: List<Photo>) : ListResult()
+    data class ItemLoadError(val error: String) : ListResult()
 }
 
-sealed class ListUiAction : Action {
-    object Initial : ListUiAction()
-    object LoadContent : ListUiAction()
-    data class ShowError(val error: String) : ListUiAction()
-    data class ShowPhoto(val photo: Photo) : ListUiAction()
+sealed class ListAction : Action {
+    object Initial : ListAction()
+    object LoadContent : ListAction()
+    data class ShowError(val error: String) : ListAction()
+    data class ShowPhoto(val photo: Photo) : ListAction()
 }
 
-data class ListUiModel(
+data class ListState(
     val inProgress: Boolean = false,
     val photos: List<Photo> = emptyList()
 ) : State
 
-val eventMapper: EventMapper<ListUiEvent, ListUiAction> =
-    { uiEvent: ListUiEvent ->
-        when (uiEvent) {
-            is ListUiEvent.Initial -> ListUiAction.Initial
-            is ListUiEvent.LoadButtonClicked -> ListUiAction.LoadContent
-            is ListUiEvent.PhotoClicked -> ListUiAction.ShowPhoto(uiEvent.photo)
+val eventMapper: EventMapper<ListEvent, ListAction> =
+    { event: ListEvent ->
+        when (event) {
+            is ListEvent.Initial -> ListAction.Initial
+            is ListEvent.LoadButtonClicked -> ListAction.LoadContent
+            is ListEvent.PhotoClicked -> ListAction.ShowPhoto(event.photo)
         }
     }
 
-fun dispatcher(context: Context, listLoadInteractor: ListLoadInteractor): Dispatcher<ListUiAction, ListUiResult> {
+fun dispatcher(context: Context, listLoadInteractor: ListLoadInteractor): Dispatcher<ListAction, ListResult> {
 
-    val initial = Dispatcher<ListUiAction, ListUiResult> {
-        it.ofType(ListUiAction.Initial::class.java)
-            .map { ListUiResult.NoChange }
+    val initial = Dispatcher<ListAction, ListResult> {
+        it.ofType(ListAction.Initial::class.java)
+            .map { ListResult.NoChange }
     }
 
-    val loadList = Dispatcher<ListUiAction, ListUiResult> {
-        it.ofType(ListUiAction.LoadContent::class.java)
+    val loadList = Dispatcher<ListAction, ListResult> {
+        it.ofType(ListAction.LoadContent::class.java)
             .flatMap { listLoadInteractor.loadList().toFlowable() }
-            .map<ListUiResult> { ListUiResult.ItemLoadSuccess(it) }
-            .onErrorReturn { ListUiResult.ItemLoadError("Error!") }
+            .map<ListResult> { ListResult.ItemLoadSuccess(it) }
+            .onErrorReturn { ListResult.ItemLoadError("Error!") }
     }
 
-    val showPhoto = Dispatcher<ListUiAction, ListUiResult> {
-        it.ofType(ListUiAction.ShowPhoto::class.java)
+    val showPhoto = Dispatcher<ListAction, ListResult> {
+        it.ofType(ListAction.ShowPhoto::class.java)
             .doOnNext {
                 context.startActivity(Intent(context, PhotoActivity::class.java).apply {
                     putExtra(PHOTO, it.photo.url)
                 })
             }
-            .map { ListUiResult.NoChange }
+            .map { ListResult.NoChange }
     }
 
     return combine(initial, loadList, showPhoto)

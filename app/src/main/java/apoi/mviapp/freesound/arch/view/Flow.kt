@@ -40,7 +40,7 @@ class Flow<E : Event, M : State, VM : ViewModel<E, M>>(
 
     private fun connect() {
         // Send UiEvents to the ViewModel
-        mviView.uiEvents()
+        mviView.events()
             .observe(lifecycleOwner, Observer { viewModel.uiEvents(it!!) })
 
         // Send UiModels to the View
