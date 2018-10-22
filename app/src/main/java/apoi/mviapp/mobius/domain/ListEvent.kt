@@ -1,4 +1,4 @@
-package apoi.mviapp.mobius.list.domain
+package apoi.mviapp.mobius.domain
 
 import apoi.mviapp.pojo.Photo
 

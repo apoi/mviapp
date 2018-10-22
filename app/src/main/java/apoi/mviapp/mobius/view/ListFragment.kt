@@ -1,15 +1,15 @@
-package apoi.mviapp.mobius.list.view
+package apoi.mviapp.mobius.view
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import apoi.mviapp.core.BaseFragment
-import apoi.mviapp.mobius.list.domain.ListEffect
-import apoi.mviapp.mobius.list.domain.ListEvent
-import apoi.mviapp.mobius.list.domain.ListLogic
-import apoi.mviapp.mobius.list.domain.ListModel
-import apoi.mviapp.mobius.list.effecthandlers.ListEffectHandlers
+import apoi.mviapp.mobius.domain.ListEffect
+import apoi.mviapp.mobius.domain.ListEvent
+import apoi.mviapp.mobius.domain.ListLogic
+import apoi.mviapp.mobius.domain.ListModel
+import apoi.mviapp.mobius.domain.ListEffectHandlers
 import com.spotify.mobius.MobiusLoop
 import com.spotify.mobius.Update
 import com.spotify.mobius.android.AndroidLogger

@@ -1,4 +1,4 @@
-package apoi.mviapp.mobius.list.view
+package apoi.mviapp.mobius.view
 
 import android.os.Bundle
 import androidx.fragment.app.FragmentTransaction

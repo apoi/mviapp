@@ -1,4 +1,4 @@
-package apoi.mviapp.freesound.list.view.domain
+package apoi.mviapp.freesound.domain
 
 import apoi.mviapp.freesound.arch.Action
 import apoi.mviapp.freesound.arch.Dispatcher
@@ -8,7 +8,7 @@ import apoi.mviapp.freesound.arch.Result
 import apoi.mviapp.freesound.arch.State
 import apoi.mviapp.freesound.arch.combine
 import apoi.mviapp.freesound.arch.viewmodel.BaseViewModel
-import apoi.mviapp.freesound.list.view.ListLoadInteractor
+import apoi.mviapp.freesound.view.ListLoadInteractor
 import apoi.mviapp.pojo.Photo
 
 typealias ListFragmentViewModel = BaseViewModel<ListUiEvent, ListUiAction, ListUiResult, ListUiModel>

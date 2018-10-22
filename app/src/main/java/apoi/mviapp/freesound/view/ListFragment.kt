@@ -1,4 +1,4 @@
-package apoi.mviapp.freesound.list.view
+package apoi.mviapp.freesound.view
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -16,14 +16,14 @@ import apoi.mviapp.freesound.arch.store.Store
 import apoi.mviapp.freesound.arch.view.Flow
 import apoi.mviapp.freesound.arch.view.MviBaseFragment
 import apoi.mviapp.freesound.arch.viewmodel.BaseViewModel
-import apoi.mviapp.freesound.list.view.domain.ListFragmentViewModel
-import apoi.mviapp.freesound.list.view.domain.ListUiAction
-import apoi.mviapp.freesound.list.view.domain.ListUiEvent
-import apoi.mviapp.freesound.list.view.domain.ListUiModel
-import apoi.mviapp.freesound.list.view.domain.ListUiResult
-import apoi.mviapp.freesound.list.view.domain.dispatcher
-import apoi.mviapp.freesound.list.view.domain.eventMapper
-import apoi.mviapp.freesound.list.view.domain.reducer
+import apoi.mviapp.freesound.domain.ListFragmentViewModel
+import apoi.mviapp.freesound.domain.ListUiAction
+import apoi.mviapp.freesound.domain.ListUiEvent
+import apoi.mviapp.freesound.domain.ListUiModel
+import apoi.mviapp.freesound.domain.ListUiResult
+import apoi.mviapp.freesound.domain.dispatcher
+import apoi.mviapp.freesound.domain.eventMapper
+import apoi.mviapp.freesound.domain.reducer
 import apoi.mviapp.injections.FragmentComponent
 import apoi.mviapp.network.Api
 import com.jakewharton.rxbinding2.view.clicks

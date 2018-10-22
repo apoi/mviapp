@@ -1,4 +1,4 @@
-package apoi.mviapp.freesound.list.view
+package apoi.mviapp.freesound.view
 
 import apoi.mviapp.network.Api
 import apoi.mviapp.pojo.Photo

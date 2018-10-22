@@ -1,4 +1,4 @@
-package apoi.mviapp.mobius.list.view
+package apoi.mviapp.mobius.view
 
 import android.view.LayoutInflater
 import android.view.View
@@ -11,10 +11,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import apoi.mviapp.R
 import apoi.mviapp.extensions.setVisibility
-import apoi.mviapp.mobius.list.domain.ListEvent
-import apoi.mviapp.mobius.list.domain.ListModel
-import apoi.mviapp.mobius.list.domain.LoadButtonClicked
-import apoi.mviapp.mobius.list.domain.PhotoClicked
+import apoi.mviapp.mobius.domain.ListEvent
+import apoi.mviapp.mobius.domain.ListModel
+import apoi.mviapp.mobius.domain.LoadButtonClicked
+import apoi.mviapp.mobius.domain.PhotoClicked
 import com.spotify.mobius.Connectable
 import com.spotify.mobius.Connection
 import com.spotify.mobius.functions.Consumer

@@ -1,4 +1,4 @@
-package apoi.mviapp.freesound.list.view
+package apoi.mviapp.freesound.view
 
 import android.os.Bundle
 import androidx.fragment.app.FragmentTransaction

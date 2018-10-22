@@ -1,4 +1,4 @@
-package apoi.mviapp.mobius.photo.view
+package apoi.mviapp.view
 
 import android.os.Bundle
 import android.view.Window

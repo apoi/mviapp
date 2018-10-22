@@ -8,9 +8,9 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import apoi.mviapp.R
-import apoi.mviapp.mobius.list.domain.ListEvent
 import apoi.mviapp.mvi2.arch.Mvi2BaseFragment
 import apoi.mviapp.mvi2.domain.ListAction
+import apoi.mviapp.mvi2.domain.ListEvent
 import apoi.mviapp.mvi2.domain.ListResult
 import apoi.mviapp.mvi2.domain.ListState
 import apoi.mviapp.network.Api

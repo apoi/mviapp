@@ -1,4 +1,4 @@
-package apoi.mviapp.freesound.list.view
+package apoi.mviapp.freesound.view
 
 import android.view.View
 import android.view.ViewGroup

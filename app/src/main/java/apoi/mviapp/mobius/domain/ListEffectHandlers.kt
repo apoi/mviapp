@@ -1,17 +1,10 @@
-package apoi.mviapp.mobius.list.effecthandlers
+package apoi.mviapp.mobius.domain
 
 import android.content.Context
 import android.content.Intent
 import android.widget.Toast
-import apoi.mviapp.mobius.list.domain.ItemLoadError
-import apoi.mviapp.mobius.list.domain.ItemLoadSuccess
-import apoi.mviapp.mobius.list.domain.ListEffect
-import apoi.mviapp.mobius.list.domain.ListEvent
-import apoi.mviapp.mobius.list.domain.LoadItems
-import apoi.mviapp.mobius.list.domain.ShowError
-import apoi.mviapp.mobius.list.domain.ShowPhoto
-import apoi.mviapp.mobius.photo.view.PHOTO
-import apoi.mviapp.mobius.photo.view.PhotoActivity
+import apoi.mviapp.view.PHOTO
+import apoi.mviapp.view.PhotoActivity
 import apoi.mviapp.network.Api
 import apoi.mviapp.network.ErrorMapper
 import com.spotify.mobius.rx2.RxMobius

@@ -1,4 +1,4 @@
-package apoi.mviapp.freesound.list.view.domain
+package apoi.mviapp.freesound.domain
 
 import apoi.mviapp.freesound.arch.Reducer
 

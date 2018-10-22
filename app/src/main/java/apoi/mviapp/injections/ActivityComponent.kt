@@ -1,6 +1,6 @@
 package apoi.mviapp.injections
 
-import apoi.mviapp.mobius.photo.view.PhotoActivity
+import apoi.mviapp.view.PhotoActivity
 import dagger.Subcomponent
 
 @ActivityScope
@@ -9,9 +9,9 @@ interface ActivityComponent {
 
     fun plusFragment(fragmentModule: FragmentModule): FragmentComponent
 
-    fun inject(activity: apoi.mviapp.mobius.list.view.ListActivity)
+    fun inject(activity: apoi.mviapp.mobius.view.ListActivity)
 
-    fun inject(activity: apoi.mviapp.freesound.list.view.ListActivity)
+    fun inject(activity: apoi.mviapp.freesound.view.ListActivity)
 
     fun inject(activity: apoi.mviapp.mvi2.view.ListActivity)
 
