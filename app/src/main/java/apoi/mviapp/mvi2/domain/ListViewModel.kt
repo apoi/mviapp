@@ -1,14 +1,14 @@
-package apoi.mviapp.mvi2.list.view.domain
+package apoi.mviapp.mvi2.domain
 
-import androidx.lifecycle.ViewModel
+import apoi.mviapp.mvi2.arch.ViewModel
 import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
 import io.reactivex.functions.BiFunction
 
-class ListViewModel : ViewModel(), apoi.mviapp.mvi2.arch.ViewModel<ListEvent, ListViewState, ListAction, ListResult> {
+class ListViewModel : ViewModel<ListEvent, ListState, ListAction, ListResult>, androidx.lifecycle.ViewModel() {
 
-    lateinit var initialState: ListViewState
+    lateinit var initialState: ListState
 
     private val relay: PublishRelay<ListEvent> = PublishRelay.create()
 
@@ -16,7 +16,7 @@ class ListViewModel : ViewModel(), apoi.mviapp.mvi2.arch.ViewModel<ListEvent, Li
         events.subscribe(relay)
     }
 
-    override val states: Observable<ListViewState> by lazy(LazyThreadSafetyMode.NONE) {
+    override val states: Observable<ListState> by lazy(LazyThreadSafetyMode.NONE) {
         relay.compose(eventFilter())
             .map { event: ListEvent -> actionFromEvent(event) }
             .filter { action: ListAction -> action !is ListAction.SkipAction }
@@ -44,8 +44,8 @@ class ListViewModel : ViewModel(), apoi.mviapp.mvi2.arch.ViewModel<ListEvent, Li
         }
     }
 
-    override fun reducer(): BiFunction<ListViewState, ListResult, ListViewState> {
-        return BiFunction { previousState: ListViewState, result: ListResult ->
+    override fun reducer(): BiFunction<ListState, ListResult, ListState> {
+        return BiFunction { previousState: ListState, result: ListResult ->
             when (result) {
                 is ListResult.SkipResult -> previousState
             }

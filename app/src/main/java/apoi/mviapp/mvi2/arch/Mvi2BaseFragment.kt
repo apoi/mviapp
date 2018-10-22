@@ -1,12 +1,12 @@
 package apoi.mviapp.mvi2.arch
 
-import apoi.mviapp.core.BaseActivity
+import apoi.mviapp.core.BaseFragment
 import io.reactivex.disposables.CompositeDisposable
 
-abstract class Mvi2Activity<E : Event, VS : ViewState, VM : ViewModel<E, VS, Action, Result>>
-    : Mvi2View<E, VS>, BaseActivity() {
+abstract class Mvi2BaseFragment<E : Event, S : State, A : Action, R : Result>
+    : Mvi2View<E, S>, BaseFragment() {
 
-    protected lateinit var viewModel: VM
+    protected lateinit var viewModel: ViewModel<E, S, A, R>
 
     protected val disposables = CompositeDisposable()
 

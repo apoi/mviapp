@@ -1,4 +1,4 @@
-package apoi.mviapp.mvi2.list.view
+package apoi.mviapp.mvi2.view
 
 import apoi.mviapp.network.Api
 import apoi.mviapp.pojo.Photo

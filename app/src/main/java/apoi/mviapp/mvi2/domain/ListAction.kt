@@ -1,4 +1,4 @@
-package apoi.mviapp.mvi2.list.view.domain
+package apoi.mviapp.mvi2.domain
 
 import apoi.mviapp.mvi2.arch.Action
 

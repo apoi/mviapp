@@ -4,22 +4,17 @@ import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
 import io.reactivex.functions.BiFunction
 
-interface ViewModel<
-    Event : apoi.mviapp.mvi2.arch.Event,
-    State : ViewState,
-    Action : apoi.mviapp.mvi2.arch.Action,
-    Result : apoi.mviapp.mvi2.arch.Result
-    > {
+interface ViewModel<E : Event, S : State, A : Action, R : Result> {
 
-    val states: Observable<State>
+    val states: Observable<S>
 
-    fun processEvents(events: Observable<Event>)
+    fun processEvents(events: Observable<E>)
 
-    fun eventFilter(): ObservableTransformer<Event, Event>
+    fun eventFilter(): ObservableTransformer<E, E>
 
-    fun actionFromEvent(event: Event): Action
+    fun actionFromEvent(event: E): A
 
-    fun results(): ObservableTransformer<Action, Result>
+    fun results(): ObservableTransformer<A, R>
 
-    fun reducer(): BiFunction<State, Result, State>
+    fun reducer(): BiFunction<S, R, S>
 }
