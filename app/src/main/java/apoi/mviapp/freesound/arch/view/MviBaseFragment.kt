@@ -19,7 +19,9 @@ package apoi.mviapp.freesound.arch.view
 import apoi.mviapp.common.Event
 import apoi.mviapp.common.State
 import apoi.mviapp.core.BaseFragment
+import apoi.mviapp.extensions.observeOnResume
 import apoi.mviapp.freesound.arch.viewmodel.ViewModel
+import timber.log.Timber
 
 /**
  * A base Fragment which provides the binding mechanism hooks to a MviView ViewModel.
@@ -30,4 +32,10 @@ abstract class MviBaseFragment<M : State, E : Event, VM : ViewModel<E, M>>
     : BaseFragment(), MviView<E, M> {
 
     internal lateinit var flow: Flow<E, M, VM>
+
+    internal abstract val viewModel: VM
+
+    init {
+        lifecycle.observeOnResume { viewModel.bind() }
+    }
 }

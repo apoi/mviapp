@@ -10,18 +10,13 @@ import androidx.lifecycle.LiveDataReactiveStreams
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import apoi.mviapp.R
-import apoi.mviapp.common.ListAction
 import apoi.mviapp.common.ListEvent
-import apoi.mviapp.common.ListResult
 import apoi.mviapp.common.ListState
 import apoi.mviapp.extensions.setVisibility
-import apoi.mviapp.freesound.arch.Logger
-import apoi.mviapp.freesound.arch.reducer
-import apoi.mviapp.freesound.arch.store.Store
 import apoi.mviapp.freesound.arch.view.Flow
 import apoi.mviapp.freesound.arch.view.MviBaseFragment
-import apoi.mviapp.freesound.arch.viewmodel.BaseViewModel
-import apoi.mviapp.freesound.domain.*
+import apoi.mviapp.freesound.arch.viewmodel.ViewModel
+import apoi.mviapp.freesound.domain.ListViewModel
 import apoi.mviapp.network.Api
 import apoi.mviapp.photo.PhotoAdapter
 import apoi.mviapp.pojo.Photo
@@ -32,7 +27,7 @@ import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.list_fragment.*
 import javax.inject.Inject
 
-class ListFragment : MviBaseFragment<ListState, ListEvent, ListFragmentViewModel>() {
+class ListFragment : MviBaseFragment<ListState, ListEvent, ViewModel<ListEvent, ListState>>() {
 
     @Inject
     lateinit var api: Api
@@ -41,22 +36,12 @@ class ListFragment : MviBaseFragment<ListState, ListEvent, ListFragmentViewModel
 
     private val photoAdapter = PhotoAdapter(photoClickedSubject::onNext)
 
-    private lateinit var viewModel: BaseViewModel<ListEvent, ListAction, ListResult, ListState>
+    override val viewModel: ViewModel<ListEvent, ListState> by lazy {
+        ListViewModel(requireContext(), ListLoadInteractor(api))
+    }
 
     override fun inject() {
         getComponent().inject(this)
-
-        // TODO inject
-        viewModel = BaseViewModel(
-            ListEvent.Initial,
-            eventMapper,
-            dispatcher(requireContext(), ListLoadInteractor(api)),
-            Store(ListState(), reducer, "ListStore", Logger()),
-            "ListFragment",
-            Logger()
-        )
-
-        flow = Flow(this, viewModel, this)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
@@ -64,8 +49,13 @@ class ListFragment : MviBaseFragment<ListState, ListEvent, ListFragmentViewModel
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         initRecyclerView()
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        flow = Flow(this, viewModel, this)
     }
 
     private fun initRecyclerView() {
@@ -82,7 +72,8 @@ class ListFragment : MviBaseFragment<ListState, ListEvent, ListFragmentViewModel
 
     override fun events(): LiveData<ListEvent> {
         return LiveDataReactiveStreams.fromPublisher(
-            Flowable.merge(loadRequested(), photoClicked()))
+            Flowable.merge(loadRequested(), photoClicked())
+        )
     }
 
     private fun loadRequested() = load_button.clicks()

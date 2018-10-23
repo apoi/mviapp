@@ -31,41 +31,41 @@ import io.reactivex.disposables.SerialDisposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 
-open class BaseViewModel<in E : Event, A : Action, R : Result, S : State>(
-    initialEvent: E,
-    eventMapper: EventMapper<E, A>,
-    dispatcher: Dispatcher<A, R>,
-    store: Store<R, S>,
-    private val logTag: String,
-    private val logger: Logger
-) : ViewModel<E, S>() {
+abstract class BaseViewModel<E : Event, A : Action, R : Result, S : State> : ViewModel<E, S>() {
 
-    private val uiEvents: PublishSubject<E> = PublishSubject.create()
-    private val uiModel: MutableLiveData<S> = MutableLiveData()
+    abstract val initialEvent: E
+    abstract val eventMapper: EventMapper<E, A>
+    abstract val dispatcher: Dispatcher<A, R>
+    abstract val store: Store<R, S>
+
+    private val events: PublishSubject<E> = PublishSubject.create()
+    private val state: MutableLiveData<S> = MutableLiveData()
     private val disposable: SerialDisposable = SerialDisposable()
 
-    init {
-        disposable.set(
-            uiEvents.startWith(initialEvent)
-                .observeOn(Schedulers.computation())
-                .doOnNext { logger.log(logTag, LogEvent.Event(it)) }
-                .asUiEventFlowable()
-                .map { eventMapper(it) }
-                .doOnNext { logger.log(logTag, LogEvent.Action(it)) }
-                .compose(dispatcher)
-                .compose(store.reduceResult())
-                .subscribe(
-                    { uiModel.postValue(it) },
-                    { logger.log(logTag, LogEvent.Error(it)) })
-        )
+    private val logTag = BaseViewModel::class.java.simpleName
+    private val logger = Logger()
+
+    override fun bind() {
+        events.startWith(initialEvent)
+            .observeOn(Schedulers.computation())
+            .doOnNext { logger.log(logTag, LogEvent.Event(it)) }
+            .asUiEventFlowable()
+            .map { eventMapper(it) }
+            .doOnNext { logger.log(logTag, LogEvent.Action(it)) }
+            .compose(dispatcher)
+            .compose(store.reduceResult())
+            .subscribe(
+                { state.postValue(it) },
+                { logger.log(logTag, LogEvent.Error(it)) })
+            .let(disposable::set)
     }
 
-    override fun uiEvents(uiEvent: E) {
-        uiEvents.onNext(uiEvent)
+    override fun events(event: E) {
+        events.onNext(event)
     }
 
-    override fun uiModels(): LiveData<S> {
-        return uiModel
+    override fun state(): LiveData<S> {
+        return state
     }
 
     override fun onCleared() {

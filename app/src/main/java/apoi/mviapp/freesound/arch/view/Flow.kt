@@ -19,13 +19,15 @@ package apoi.mviapp.freesound.arch.view
 import androidx.lifecycle.*
 import apoi.mviapp.common.Event
 import apoi.mviapp.common.State
+import apoi.mviapp.extensions.observeOnCreate
+import apoi.mviapp.extensions.observeOnDestroy
 import apoi.mviapp.freesound.arch.viewmodel.ViewModel
 
 /**
  * The MviView holds this instance.
  */
-class Flow<E : Event, M : State, VM : ViewModel<E, M>>(
-    private val mviView: MviView<E, M>,
+class Flow<E : Event, S : State, VM : ViewModel<E, S>>(
+    private val mviView: MviView<E, S>,
     private val viewModel: VM,
     private val lifecycleOwner: LifecycleOwner
 ) {
@@ -35,29 +37,18 @@ class Flow<E : Event, M : State, VM : ViewModel<E, M>>(
     }
 
     private fun connect() {
-        // Send UiEvents to the ViewModel
-        mviView.events()
-            .observe(lifecycleOwner, Observer { viewModel.uiEvents(it!!) })
+        // Start processing Events
+        viewModel.bind()
 
-        // Send UiModels to the View
-        viewModel.uiModels()
-            .observe(lifecycleOwner, Observer { mviView.render(it!!) })
+        // Send Events to the ViewModel
+        mviView.events()
+            .observe(lifecycleOwner, Observer { viewModel.events(it) })
+
+        // Send States to the View
+        viewModel.state()
+            .observe(lifecycleOwner, Observer { mviView.render(it) })
 
         // Cancels asynchronous actions the view is handling
         lifecycleOwner.lifecycle.observeOnDestroy { mviView.cancel() }
-    }
-
-    private fun Lifecycle.observeOnDestroy(action: () -> Unit) {
-        this.addObserver(object : LifecycleObserver {
-            @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-            fun onDestroyed() = action()
-        })
-    }
-
-    private fun Lifecycle.observeOnCreate(action: () -> Unit) {
-        this.addObserver(object : LifecycleObserver {
-            @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
-            fun onCreate() = action()
-        })
     }
 }

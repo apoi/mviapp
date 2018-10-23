@@ -26,10 +26,11 @@ import io.reactivex.FlowableTransformer
 
 class Store<R : Result, S : State>(
     private val initialState: S,
-    private val reducer: Reducer<R, S>,
-    private val tag: String,
-    private val logger: Logger
+    private val reducer: Reducer<R, S>
 ) {
+
+    private val tag = Store::class.java.simpleName
+    private val logger = Logger()
 
     fun reduceResult(): FlowableTransformer<R, S> {
         return FlowableTransformer { it ->

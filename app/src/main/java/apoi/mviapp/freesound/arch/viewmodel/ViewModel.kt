@@ -18,10 +18,14 @@ package apoi.mviapp.freesound.arch.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import apoi.mviapp.common.Event
+import apoi.mviapp.common.State
 
-abstract class ViewModel<in E, M> : ViewModel() {
+abstract class ViewModel<in E : Event, S : State> : ViewModel() {
 
-    abstract fun uiEvents(uiEvent: E)
+    abstract fun events(event: E)
 
-    abstract fun uiModels(): LiveData<M>
+    abstract fun state(): LiveData<S>
+
+    abstract fun bind()
 }
