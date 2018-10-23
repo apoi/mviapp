@@ -1,20 +1,38 @@
 package apoi.mviapp.mvi2.arch
 
+import apoi.mviapp.mvi2.domain.ListAction
+import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
 import io.reactivex.functions.BiFunction
+import io.reactivex.schedulers.Schedulers
 
-interface ViewModel<E : Event, S : State, A : Action, R : Result> {
+abstract class ViewModel<E : Event, S : State, A : Action, R : Result> : androidx.lifecycle.ViewModel() {
 
-    val states: Observable<S>
+    private val relay: PublishRelay<E> = PublishRelay.create()
 
-    fun processEvents(events: Observable<E>)
+    fun states(): Observable<S> {
+        return relay.compose(eventFilter())
+            .observeOn(Schedulers.io())
+            .map(this::actionFromEvent)
+            .filter { action -> action !is ListAction.SkipAction }
+            .compose(results())
+            .scan(initialState(), reducer())
+            .replay(1)
+            .autoConnect(0)
+    }
 
-    fun eventFilter(): ObservableTransformer<E, E>
+    fun processEvents(events: Observable<E>) {
+        events.subscribe(relay)
+    }
 
-    fun actionFromEvent(event: E): A
+    abstract fun initialState(): S
 
-    fun results(): ObservableTransformer<A, R>
+    protected abstract fun eventFilter(): ObservableTransformer<E, E>
 
-    fun reducer(): BiFunction<S, R, S>
+    protected abstract fun actionFromEvent(event: E): A
+
+    protected abstract fun results(): ObservableTransformer<A, R>
+
+    protected abstract fun reducer(): BiFunction<S, R, S>
 }

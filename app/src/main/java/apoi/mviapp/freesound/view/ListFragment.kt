@@ -34,7 +34,7 @@ class ListFragment : MviBaseFragment<ListState, ListEvent, ListFragmentViewModel
 
     private val photoClickedSubject = PublishSubject.create<Photo>()
 
-    private val photoAdapter = PhotoAdapter { photo -> photoClickedSubject.onNext(photo) }
+    private val photoAdapter = PhotoAdapter(photoClickedSubject::onNext)
 
     private lateinit var viewModel: BaseViewModel<ListEvent, ListAction, ListResult, ListState>
 
