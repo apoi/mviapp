@@ -1,4 +1,4 @@
-package apoi.mviapp.mvi2.arch
+package apoi.mviapp.common
 
 interface Event
 interface Action

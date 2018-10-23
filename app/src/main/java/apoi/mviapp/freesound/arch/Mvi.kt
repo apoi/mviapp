@@ -16,13 +16,10 @@
 
 package apoi.mviapp.freesound.arch
 
+import apoi.mviapp.common.ListResult
+import apoi.mviapp.common.ListState
 import io.reactivex.Flowable
 import io.reactivex.FlowableTransformer
-
-interface Event
-interface Action
-interface Result
-interface State
 
 typealias EventMapper<E, A> = (E) -> A
 
@@ -37,3 +34,13 @@ fun <A, R> combine(vararg transformers: Dispatcher<A, R>): Dispatcher<A, R> {
         }
     }
 }
+
+val reducer: Reducer<ListResult, ListState> =
+        { current: ListState, result: ListResult -> current.reduceModel(result) }
+
+private fun ListState.reduceModel(result: ListResult): ListState =
+        when (result) {
+            is ListResult.NoChange -> this
+            is ListResult.ItemLoadSuccess -> this.copy(photos = result.photos)
+            is ListResult.ItemLoadError -> this
+        }

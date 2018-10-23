@@ -11,10 +11,10 @@ import apoi.mviapp.R
 import apoi.mviapp.extensions.setVisibility
 import apoi.mviapp.mvi2.arch.Mvi2BaseFragment
 import apoi.mviapp.mvi2.arch.ViewModel
-import apoi.mviapp.mvi2.domain.ListAction
-import apoi.mviapp.mvi2.domain.ListEvent
-import apoi.mviapp.mvi2.domain.ListResult
-import apoi.mviapp.mvi2.domain.ListState
+import apoi.mviapp.common.ListAction
+import apoi.mviapp.common.ListEvent
+import apoi.mviapp.common.ListResult
+import apoi.mviapp.common.ListState
 import apoi.mviapp.mvi2.domain.ListViewModel
 import apoi.mviapp.network.Api
 import apoi.mviapp.photo.PhotoAdapter
@@ -35,7 +35,7 @@ class ListFragment : Mvi2BaseFragment<ListEvent, ListState, ListAction, ListResu
 
     private val photoAdapter = PhotoAdapter(photoClickedSubject::onNext)
 
-    private val onInitialisedEvent: PublishRelay<ListEvent.OnInitialized> = PublishRelay.create()
+    private val onInitialisedEvent: PublishRelay<ListEvent.Initial> = PublishRelay.create()
 
     override val viewModel: ViewModel<ListEvent, ListState, ListAction, ListResult> by lazy {
         ListViewModel(requireContext(), api, ListState())

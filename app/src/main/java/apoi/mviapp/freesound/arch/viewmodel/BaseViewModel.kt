@@ -18,20 +18,20 @@ package apoi.mviapp.freesound.arch.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import apoi.mviapp.freesound.arch.Action
+import apoi.mviapp.common.Action
+import apoi.mviapp.common.Event
+import apoi.mviapp.common.Result
+import apoi.mviapp.common.State
 import apoi.mviapp.freesound.arch.Dispatcher
-import apoi.mviapp.freesound.arch.Event
 import apoi.mviapp.freesound.arch.EventMapper
 import apoi.mviapp.freesound.arch.LogEvent
 import apoi.mviapp.freesound.arch.Logger
-import apoi.mviapp.freesound.arch.Result
-import apoi.mviapp.freesound.arch.State
 import apoi.mviapp.freesound.arch.store.Store
 import io.reactivex.disposables.SerialDisposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 
-class BaseViewModel<in E : Event, A : Action, R : Result, S : State>(
+open class BaseViewModel<in E : Event, A : Action, R : Result, S : State>(
     initialEvent: E,
     eventMapper: EventMapper<E, A>,
     dispatcher: Dispatcher<A, R>,

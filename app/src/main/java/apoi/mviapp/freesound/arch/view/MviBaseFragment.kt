@@ -16,9 +16,9 @@
 
 package apoi.mviapp.freesound.arch.view
 
+import apoi.mviapp.common.Event
+import apoi.mviapp.common.State
 import apoi.mviapp.core.BaseFragment
-import apoi.mviapp.freesound.arch.Event
-import apoi.mviapp.freesound.arch.State
 import apoi.mviapp.freesound.arch.viewmodel.ViewModel
 
 /**

@@ -33,10 +33,10 @@ class Logger {
 }
 
 sealed class LogEvent {
-    data class Event(val event: apoi.mviapp.freesound.arch.Event) : LogEvent()
-    data class Action(val action: apoi.mviapp.freesound.arch.Action) : LogEvent()
-    data class Result(val result: apoi.mviapp.freesound.arch.Result) : LogEvent()
-    data class Reduce(val result: apoi.mviapp.freesound.arch.Result, val prevState: apoi.mviapp.freesound.arch.State) : LogEvent()
-    data class State(val state: apoi.mviapp.freesound.arch.State) : LogEvent()
+    data class Event(val event: apoi.mviapp.common.Event) : LogEvent()
+    data class Action(val action: apoi.mviapp.common.Action) : LogEvent()
+    data class Result(val result: apoi.mviapp.common.Result) : LogEvent()
+    data class Reduce(val result: apoi.mviapp.common.Result, val prevState: apoi.mviapp.common.State) : LogEvent()
+    data class State(val state: apoi.mviapp.common.State) : LogEvent()
     data class Error(val throwable: Throwable) : LogEvent()
 }

@@ -1,6 +1,5 @@
-package apoi.mviapp.mvi2.domain
+package apoi.mviapp.common
 
-import apoi.mviapp.mvi2.arch.State
 import apoi.mviapp.pojo.Photo
 
 data class ListState(

@@ -16,11 +16,11 @@
 
 package apoi.mviapp.freesound.arch.store
 
+import apoi.mviapp.common.Result
+import apoi.mviapp.common.State
 import apoi.mviapp.freesound.arch.LogEvent
 import apoi.mviapp.freesound.arch.Logger
 import apoi.mviapp.freesound.arch.Reducer
-import apoi.mviapp.freesound.arch.Result
-import apoi.mviapp.freesound.arch.State
 import apoi.mviapp.freesound.arch.viewmodel.asUiModelFlowable
 import io.reactivex.FlowableTransformer
 

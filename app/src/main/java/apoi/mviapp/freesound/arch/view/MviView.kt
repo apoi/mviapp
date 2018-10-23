@@ -17,8 +17,8 @@
 package apoi.mviapp.freesound.arch.view
 
 import androidx.lifecycle.LiveData
-import apoi.mviapp.freesound.arch.Event
-import apoi.mviapp.freesound.arch.State
+import apoi.mviapp.common.Event
+import apoi.mviapp.common.State
 
 interface MviView<E : Event, in S : State> {
     fun events(): LiveData<E> = EmptyLiveData()

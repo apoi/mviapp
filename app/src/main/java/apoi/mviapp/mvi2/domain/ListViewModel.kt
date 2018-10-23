@@ -2,6 +2,10 @@ package apoi.mviapp.mvi2.domain
 
 import android.content.Context
 import android.content.Intent
+import apoi.mviapp.common.ListAction
+import apoi.mviapp.common.ListEvent
+import apoi.mviapp.common.ListResult
+import apoi.mviapp.common.ListState
 import apoi.mviapp.mvi2.arch.ViewModel
 import apoi.mviapp.network.Api
 import apoi.mviapp.photo.PHOTO
@@ -24,7 +28,7 @@ class ListViewModel(
     }
 
     override fun actionFromEvent(event: ListEvent): ListAction = when (event) {
-        is ListEvent.OnInitialized -> ListAction.SkipAction
+        is ListEvent.Initial -> ListAction.Initial
         is ListEvent.LoadButtonClicked -> ListAction.LoadContent
         is ListEvent.PhotoClicked -> ListAction.ShowPhoto(event.photo)
     }
@@ -33,9 +37,9 @@ class ListViewModel(
         return ObservableTransformer { actions: Observable<ListAction> ->
             actions.publish { shared: Observable<ListAction> ->
                 Observable.merge(
-                    shared.ofType(ListAction.SkipAction::class.java)
+                    shared.ofType(ListAction.Initial::class.java)
                         .doOnNext { Timber.w("Skip") }
-                        .map<ListResult> { ListResult.SkipResult },
+                        .map<ListResult> { ListResult.NoChange },
 
                     shared.ofType(ListAction.LoadContent::class.java)
                         .doOnNext { Timber.w("Load") }
@@ -51,7 +55,7 @@ class ListViewModel(
                                 putExtra(PHOTO, it.photo.url)
                             })
                         }
-                        .map { ListResult.SkipResult }
+                        .map { ListResult.NoChange }
                 )
             }
         }
@@ -60,7 +64,7 @@ class ListViewModel(
     override fun reducer(): BiFunction<ListState, ListResult, ListState> {
         return BiFunction { previousState: ListState, result: ListResult ->
             when (result) {
-                is ListResult.SkipResult -> previousState
+                is ListResult.NoChange -> previousState
                 is ListResult.ItemLoadSuccess -> previousState.copy(inProgress = false, photos = result.photos)
                 is ListResult.ItemLoadError -> previousState.copy(inProgress = false)
             }

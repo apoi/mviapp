@@ -32,8 +32,7 @@ class MviApp : Application() {
         graph = DaggerGraph.builder()
             .applicationModule(ApplicationModule(this))
             .build()
-
-        graph.inject(this)
+            .also { it.inject(this) }
     }
 
     fun graph(): Graph {

@@ -1,6 +1,6 @@
 package apoi.mviapp.mvi2.arch
 
-import apoi.mviapp.mvi2.domain.ListAction
+import apoi.mviapp.common.*
 import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
@@ -15,7 +15,7 @@ abstract class ViewModel<E : Event, S : State, A : Action, R : Result> : android
         return relay.compose(eventFilter())
             .observeOn(Schedulers.io())
             .map(this::actionFromEvent)
-            .filter { action -> action !is ListAction.SkipAction }
+            .filter { action -> action !is ListAction.Initial }
             .compose(results())
             .scan(initialState(), reducer())
             .replay(1)

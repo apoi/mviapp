@@ -16,13 +16,9 @@
 
 package apoi.mviapp.freesound.arch.view
 
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.Observer
-import androidx.lifecycle.OnLifecycleEvent
-import apoi.mviapp.freesound.arch.Event
-import apoi.mviapp.freesound.arch.State
+import androidx.lifecycle.*
+import apoi.mviapp.common.Event
+import apoi.mviapp.common.State
 import apoi.mviapp.freesound.arch.viewmodel.ViewModel
 
 /**
