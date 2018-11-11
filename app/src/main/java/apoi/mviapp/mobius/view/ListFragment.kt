@@ -4,12 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import apoi.mviapp.common.ListState
 import apoi.mviapp.core.BaseFragment
 import apoi.mviapp.mobius.domain.ListEffect
+import apoi.mviapp.mobius.domain.ListEffectHandlers
 import apoi.mviapp.mobius.domain.ListEvent
 import apoi.mviapp.mobius.domain.ListLogic
-import apoi.mviapp.mobius.domain.ListModel
-import apoi.mviapp.mobius.domain.ListEffectHandlers
 import com.spotify.mobius.MobiusLoop
 import com.spotify.mobius.Update
 import com.spotify.mobius.android.AndroidLogger
@@ -18,6 +18,8 @@ import com.spotify.mobius.rx2.RxMobius
 import io.reactivex.ObservableTransformer
 import javax.inject.Inject
 
+private const val STATE = "model_state"
+
 class ListFragment : BaseFragment() {
 
     @Inject
@@ -25,9 +27,9 @@ class ListFragment : BaseFragment() {
 
     private val listLogic = ListLogic()
 
-    private lateinit var listView: ListView
+    private lateinit var view: ListView
 
-    private lateinit var controller: MobiusLoop.Controller<ListModel, ListEvent>
+    private lateinit var controller: MobiusLoop.Controller<ListState, ListEvent>
 
     override fun inject() {
         getComponent().inject(this)
@@ -35,19 +37,27 @@ class ListFragment : BaseFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return ListView(inflater, container).also {
-            listView = it
+            view = it
         }.view
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        val initialModel = savedInstanceState?.getParcelable(STATE) ?: ListState()
+
         controller = MobiusAndroid.controller(
             createLoop(listLogic.createUpdate(), listEffectHandlers.createHandler()),
-            ListModel()
+            initialModel
         )
 
-        controller.connect(listView)
+        controller.connect(view)
+        view.render(initialModel)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putParcelable(STATE, controller.model)
     }
 
     override fun onResume() {
@@ -66,9 +76,9 @@ class ListFragment : BaseFragment() {
     }
 
     private fun createLoop(
-        update: Update<ListModel, ListEvent, ListEffect>,
+        update: Update<ListState, ListEvent, ListEffect>,
         effectHandler: ObservableTransformer<ListEffect, ListEvent>
-    ): MobiusLoop.Factory<ListModel, ListEvent, ListEffect> {
+    ): MobiusLoop.Factory<ListState, ListEvent, ListEffect> {
         return RxMobius.loop(update, effectHandler)
             .logger(AndroidLogger.tag("List"))
     }

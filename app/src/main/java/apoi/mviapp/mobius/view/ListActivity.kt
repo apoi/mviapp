@@ -1,6 +1,7 @@
 package apoi.mviapp.mobius.view
 
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import apoi.mviapp.R
 import apoi.mviapp.core.BaseActivity
@@ -16,10 +17,12 @@ class ListActivity : BaseActivity() {
 
         setContentView(R.layout.activity)
 
-        supportFragmentManager
-            .beginTransaction()
-            .replace(R.id.container, ListFragment())
-            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-            .commit()
+        if (savedInstanceState == null) {
+            supportFragmentManager
+                .beginTransaction()
+                .replace(R.id.container, ListFragment())
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                .commit()
+        }
     }
 }

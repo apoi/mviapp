@@ -10,9 +10,9 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import apoi.mviapp.R
+import apoi.mviapp.common.ListState
 import apoi.mviapp.extensions.setVisibility
 import apoi.mviapp.mobius.domain.ListEvent
-import apoi.mviapp.mobius.domain.ListModel
 import apoi.mviapp.mobius.domain.LoadButtonClicked
 import apoi.mviapp.mobius.domain.PhotoClicked
 import apoi.mviapp.photo.PhotoAdapter
@@ -23,7 +23,7 @@ import com.spotify.mobius.functions.Consumer
 class ListView(
     inflater: LayoutInflater,
     parent: ViewGroup?
-) : Connectable<ListModel, ListEvent> {
+) : Connectable<ListState, ListEvent> {
 
     val view: View = inflater.inflate(R.layout.list_fragment, parent, false)
 
@@ -33,12 +33,12 @@ class ListView(
 
     private lateinit var photoAdapter: PhotoAdapter
 
-    override fun connect(output: Consumer<ListEvent>): Connection<ListModel> {
+    override fun connect(output: Consumer<ListEvent>): Connection<ListState> {
         initRecyclerView(output)
         setListeners(output)
 
-        return object : Connection<ListModel> {
-            override fun accept(value: ListModel) {
+        return object : Connection<ListState> {
+            override fun accept(value: ListState) {
                 render(value)
             }
 
@@ -70,7 +70,7 @@ class ListView(
         loadButton.setOnClickListener(null)
     }
 
-    private fun render(value: ListModel) {
+    fun render(value: ListState) {
         progressBar.setVisibility(value.inProgress)
         loadButton.setVisibility(!value.inProgress && value.photos.isEmpty())
         recyclerView.setVisibility(!value.inProgress && value.photos.isNotEmpty())

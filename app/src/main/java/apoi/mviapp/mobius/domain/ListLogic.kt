@@ -1,12 +1,13 @@
 package apoi.mviapp.mobius.domain
 
+import apoi.mviapp.common.ListState
 import com.spotify.mobius.Effects
 import com.spotify.mobius.Next
 import com.spotify.mobius.Update
 
 class ListLogic {
 
-    fun createUpdate(): Update<ListModel, ListEvent, ListEffect> {
+    fun createUpdate(): Update<ListState, ListEvent, ListEffect> {
         return Update { model, event ->
             when (event) {
                 is LoadButtonClicked -> {
