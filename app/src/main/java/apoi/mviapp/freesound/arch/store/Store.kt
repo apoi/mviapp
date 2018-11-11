@@ -25,7 +25,7 @@ import apoi.mviapp.freesound.arch.viewmodel.asUiModelFlowable
 import io.reactivex.FlowableTransformer
 
 class Store<R : Result, S : State>(
-    private val initialState: S,
+    private val initialState: () -> S,
     private val reducer: Reducer<R, S>
 ) {
 
@@ -35,7 +35,7 @@ class Store<R : Result, S : State>(
     fun reduceResult(): FlowableTransformer<R, S> {
         return FlowableTransformer { it ->
             it.doOnNext { result -> logger.log(tag, LogEvent.Result(result)) }
-                .scan(initialState) { model: S, result: R -> reduce(model, result) }
+                .scan(initialState.invoke()) { model: S, result: R -> reduce(model, result) }
                 .doOnNext { model: S -> logger.log(tag, LogEvent.State(model)) }
                 .asUiModelFlowable()
         }

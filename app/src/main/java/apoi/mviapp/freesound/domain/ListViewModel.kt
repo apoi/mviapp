@@ -12,13 +12,13 @@ import apoi.mviapp.freesound.arch.Reducer
 import apoi.mviapp.freesound.arch.combine
 import apoi.mviapp.freesound.arch.store.Store
 import apoi.mviapp.freesound.arch.viewmodel.BaseViewModel
-import apoi.mviapp.freesound.view.ListLoadInteractor
+import apoi.mviapp.network.Api
 import apoi.mviapp.photo.PHOTO
 import apoi.mviapp.photo.PhotoActivity
 
 class ListViewModel(
     context: Context,
-    listLoadInteractor: ListLoadInteractor
+    api: Api
 ) : BaseViewModel<ListEvent, ListAction, ListResult, ListState>() {
 
     override val initialEvent = ListEvent.Initial
@@ -39,7 +39,7 @@ class ListViewModel(
         },
         Dispatcher {
             it.ofType(ListAction.LoadContent::class.java)
-                .flatMap { listLoadInteractor.loadList().toFlowable() }
+                .flatMap { api.getPhotos().toFlowable() }
                 .map<ListResult> { ListResult.ItemLoadSuccess(it) }
                 .onErrorReturn { ListResult.ItemLoadError("Error!") }
         },
@@ -62,5 +62,5 @@ class ListViewModel(
             }
         }
 
-    override val store = Store(ListState(), reducer)
+    override val store = Store({ state().value ?: ListState() }, reducer)
 }

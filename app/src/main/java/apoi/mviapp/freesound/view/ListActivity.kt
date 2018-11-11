@@ -16,10 +16,12 @@ class ListActivity : BaseActivity() {
 
         setContentView(R.layout.activity)
 
-        supportFragmentManager
-            .beginTransaction()
-            .replace(R.id.container, ListFragment())
-            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-            .commit()
+        if (savedInstanceState == null) {
+            supportFragmentManager
+                .beginTransaction()
+                .replace(R.id.container, ListFragment())
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                .commit()
+        }
     }
 }
