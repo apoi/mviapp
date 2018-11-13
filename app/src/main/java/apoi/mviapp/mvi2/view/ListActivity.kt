@@ -14,7 +14,7 @@ class ListActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.activity)
+        setContentView(R.layout.list_activity)
 
         supportFragmentManager
             .beginTransaction()

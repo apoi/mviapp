@@ -1,7 +1,6 @@
 package apoi.mviapp.mobius.view
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import apoi.mviapp.R
 import apoi.mviapp.core.BaseActivity
@@ -15,7 +14,7 @@ class ListActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.activity)
+        setContentView(R.layout.list_activity)
 
         if (savedInstanceState == null) {
             supportFragmentManager
