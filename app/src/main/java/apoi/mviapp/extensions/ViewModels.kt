@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package apoi.mviapp.freesound.arch.viewmodel
+package apoi.mviapp.extensions
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity

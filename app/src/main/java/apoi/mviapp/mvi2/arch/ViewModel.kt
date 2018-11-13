@@ -4,6 +4,7 @@ import apoi.mviapp.common.*
 import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
+import io.reactivex.disposables.Disposable
 import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
 
@@ -22,8 +23,8 @@ abstract class ViewModel<E : Event, S : State, A : Action, R : Result> : android
             .autoConnect(0)
     }
 
-    fun processEvents(events: Observable<E>) {
-        events.subscribe(relay)
+    fun processEvents(events: Observable<E>): Disposable {
+        return events.subscribe(relay)
     }
 
     abstract fun initialState(): S

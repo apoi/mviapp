@@ -9,7 +9,7 @@ import apoi.mviapp.common.ListState
 import apoi.mviapp.freesound.arch.view.Flow
 import apoi.mviapp.freesound.arch.view.MviBaseFragment
 import apoi.mviapp.freesound.arch.viewmodel.ViewModel
-import apoi.mviapp.freesound.arch.viewmodel.viewModelProvider
+import apoi.mviapp.extensions.viewModelProvider
 import apoi.mviapp.freesound.domain.ListViewModel
 import apoi.mviapp.network.Api
 import javax.inject.Inject

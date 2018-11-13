@@ -17,11 +17,10 @@ import timber.log.Timber
 
 class ListViewModel(
     private val context: Context,
-    private val api: Api,
-    private val initialState: ListState
+    private val api: Api
 ) : ViewModel<ListEvent, ListState, ListAction, ListResult>() {
 
-    override fun initialState(): ListState = initialState
+    override fun initialState(): ListState = ListState()
 
     override fun eventFilter(): ObservableTransformer<ListEvent, ListEvent> {
         return ObservableTransformer { events -> events }

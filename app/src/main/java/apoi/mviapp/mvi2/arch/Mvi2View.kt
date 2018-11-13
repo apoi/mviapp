@@ -4,9 +4,9 @@ import apoi.mviapp.common.Event
 import apoi.mviapp.common.State
 import io.reactivex.Observable
 
-interface Mvi2View<E : Event, in VS : State> {
+interface Mvi2View<E : Event, in S : State> {
 
     val events: Observable<E>
 
-    fun render(state: VS)
+    fun render(state: S)
 }

@@ -9,17 +9,19 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 
 abstract class Mvi2BaseFragment<E : Event, S : State, A : Action, R : Result>
-    : Mvi2View<E, S>, BaseFragment() {
+    : BaseFragment() {
 
     protected abstract val viewModel: ViewModel<E, S, A, R>
 
     protected val disposables = CompositeDisposable()
 
-    protected fun bindToViewModel() {
-        viewModel.processEvents(events)
+    protected fun bindToViewModel(view: Mvi2View<E, S>) {
+        viewModel.processEvents(view.events)
+            .also { disposables.add(it) }
 
-        disposables.add(viewModel.states()
+        viewModel.states()
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(this::render))
+            .subscribe(view::render)
+            .also { disposables.add(it) }
     }
 }
