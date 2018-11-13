@@ -3,10 +3,10 @@ package apoi.mviapp.mobius.domain
 import android.content.Context
 import android.content.Intent
 import android.widget.Toast
-import apoi.mviapp.photo.PHOTO
-import apoi.mviapp.photo.PhotoActivity
 import apoi.mviapp.network.Api
 import apoi.mviapp.network.ErrorMapper
+import apoi.mviapp.photo.PHOTO
+import apoi.mviapp.photo.PhotoActivity
 import com.spotify.mobius.rx2.RxMobius
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer

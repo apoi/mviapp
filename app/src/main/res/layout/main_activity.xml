@@ -1,28 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    android:orientation="vertical"
-    android:gravity="center">
-
-    <Button
-        android:id="@+id/button_mobius"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Mobius" />
-
-    <Button
-        android:id="@+id/button_freesound"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Freesound" />
-
-    <Button
-        android:id="@+id/button_mvi2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Mvi2" />
-
-</LinearLayout>
+    android:fitsSystemWindows="true" />

@@ -1,23 +1,26 @@
 package apoi.mviapp
 
-import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.main_activity.*
+import androidx.fragment.app.FragmentTransaction
+import apoi.mviapp.core.BaseActivity
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
+
+    override fun inject() {
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.main_activity)
 
-        button_mobius.setOnClickListener { launchActivity(apoi.mviapp.mobius.view.ListActivity::class.java) }
-        button_freesound.setOnClickListener { launchActivity(apoi.mviapp.freesound.view.ListActivity::class.java) }
-        button_mvi2.setOnClickListener { launchActivity(apoi.mviapp.mvi2.view.ListActivity::class.java) }
-    }
-
-    private fun launchActivity(activity: Class<*>) {
-        startActivity(Intent(this, activity))
+        if (savedInstanceState == null) {
+            supportFragmentManager
+                .beginTransaction()
+                .addToBackStack("main")
+                .replace(R.id.container, MainFragment())
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                .commit()
+        }
     }
 }

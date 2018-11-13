@@ -16,7 +16,8 @@
 
 package apoi.mviapp.freesound.arch.view
 
-import androidx.lifecycle.*
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
 import apoi.mviapp.common.Event
 import apoi.mviapp.common.State
 import apoi.mviapp.extensions.observeOnCreate

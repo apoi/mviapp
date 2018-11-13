@@ -8,13 +8,13 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import apoi.mviapp.R
-import apoi.mviapp.extensions.setVisibility
-import apoi.mviapp.mvi2.arch.Mvi2BaseFragment
-import apoi.mviapp.mvi2.arch.ViewModel
 import apoi.mviapp.common.ListAction
 import apoi.mviapp.common.ListEvent
 import apoi.mviapp.common.ListResult
 import apoi.mviapp.common.ListState
+import apoi.mviapp.extensions.setVisibility
+import apoi.mviapp.mvi2.arch.Mvi2BaseFragment
+import apoi.mviapp.mvi2.arch.ViewModel
 import apoi.mviapp.mvi2.domain.ListViewModel
 import apoi.mviapp.network.Api
 import apoi.mviapp.photo.PhotoAdapter
