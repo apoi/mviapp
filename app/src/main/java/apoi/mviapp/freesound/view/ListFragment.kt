@@ -6,10 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import apoi.mviapp.common.ListEvent
 import apoi.mviapp.common.ListState
+import apoi.mviapp.extensions.viewModelProvider
 import apoi.mviapp.freesound.arch.view.Flow
 import apoi.mviapp.freesound.arch.view.MviBaseFragment
 import apoi.mviapp.freesound.arch.viewmodel.ViewModel
-import apoi.mviapp.extensions.viewModelProvider
 import apoi.mviapp.freesound.domain.ListViewModel
 import apoi.mviapp.network.Api
 import javax.inject.Inject
@@ -23,7 +23,7 @@ class ListFragment : MviBaseFragment<ListState, ListEvent, ViewModel<ListEvent, 
 
     override val viewModel: ViewModel<ListEvent, ListState> by lazy {
         this.viewModelProvider {
-            ListViewModel(requireContext(), api)
+            ListViewModel(requireContext(), api, initialState ?: ListState())
         }
     }
 

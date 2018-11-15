@@ -7,6 +7,7 @@ import apoi.mviapp.API_ENDPOINT
 import apoi.mviapp.SHARED_PREFS
 import apoi.mviapp.network.Api
 import apoi.mviapp.network.InstantAdapter
+import apoi.mviapp.store.MemoryStore
 import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
@@ -73,5 +74,11 @@ class ApplicationModule(private val application: Application) {
             .build()
 
         return retrofit.create(Api::class.java)
+    }
+
+    @Provides
+    @Singleton
+    internal fun provideStore(): MemoryStore<Int, Any> {
+        return MemoryStore()
     }
 }

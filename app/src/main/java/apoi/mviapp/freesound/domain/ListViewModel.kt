@@ -18,7 +18,8 @@ import apoi.mviapp.photo.PhotoActivity
 
 class ListViewModel(
     context: Context,
-    api: Api
+    api: Api,
+    private val initialState: ListState
 ) : BaseViewModel<ListEvent, ListAction, ListResult, ListState>() {
 
     override val initialEvent = ListEvent.Initial
@@ -62,5 +63,5 @@ class ListViewModel(
             }
         }
 
-    override val store = Store({ state().value ?: ListState() }, reducer)
+    override val store = Store({ state().value ?: initialState }, reducer)
 }
