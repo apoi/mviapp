@@ -18,8 +18,6 @@ import com.spotify.mobius.rx2.RxMobius
 import io.reactivex.ObservableTransformer
 import javax.inject.Inject
 
-private const val STATE = "model_state"
-
 class ListFragment : BaseFragment() {
 
     @Inject
@@ -44,7 +42,7 @@ class ListFragment : BaseFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        val initialModel = savedInstanceState?.getParcelable(STATE) ?: ListState()
+        val initialModel = ListState()
 
         controller = MobiusAndroid.controller(
             createLoop(listLogic.createUpdate(), listEffectHandlers.createHandler()),
@@ -53,11 +51,6 @@ class ListFragment : BaseFragment() {
 
         controller.connect(view)
         view.render(initialModel)
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putParcelable(STATE, controller.model)
     }
 
     override fun onResume() {
