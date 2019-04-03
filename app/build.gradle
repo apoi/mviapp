@@ -36,13 +36,13 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'com.google.android.material:material:1.0.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha2'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha3'
 
     // Ktlint
-    ktlint "com.github.shyiko:ktlint:0.29.0"
+    ktlint "com.github.shyiko:ktlint:0.30.0"
 
     // KTX
-    implementation 'androidx.core:core-ktx:1.0.0'
+    implementation 'androidx.core:core-ktx:1.0.1'
 
     // Android Architecture
     implementation "android.arch.lifecycle:runtime:1.1.1"
@@ -52,8 +52,8 @@ dependencies {
     kapt "android.arch.lifecycle:compiler:1.1.1"
 
     // RxJava
-    implementation 'io.reactivex.rxjava2:rxjava:2.2.2'
-    implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.7'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
 
     // Rx Bindings
     implementation 'com.jakewharton.rxbinding2:rxbinding-kotlin:2.2.0'
@@ -66,27 +66,27 @@ dependencies {
     implementation 'com.jakewharton.rxrelay2:rxrelay:2.1.0'
 
     // Mobius
-    implementation 'com.spotify.mobius:mobius-core:1.2.0'
-    implementation 'com.spotify.mobius:mobius-rx2:1.2.0'
-    implementation 'com.spotify.mobius:mobius-android:1.2.0'
-    implementation 'com.spotify.mobius:mobius-extras:1.2.0'
+    implementation 'com.spotify.mobius:mobius-core:1.2.1'
+    implementation 'com.spotify.mobius:mobius-rx2:1.2.1'
+    implementation 'com.spotify.mobius:mobius-android:1.2.1'
+    implementation 'com.spotify.mobius:mobius-extras:1.2.1'
 
     // Dagger
-    kapt 'com.google.dagger:dagger-compiler:2.16'
-    implementation 'com.google.dagger:dagger:2.16'
+    kapt 'com.google.dagger:dagger-compiler:2.21'
+    implementation 'com.google.dagger:dagger:2.21'
 
     // OkHttp
-    implementation 'com.squareup.okhttp3:okhttp:3.11.0'
-    implementation 'com.squareup.okhttp3:okhttp-android-support:3.11.0'
-    implementation 'com.squareup.okhttp3:logging-interceptor:3.11.0'
+    implementation 'com.squareup.okhttp3:okhttp:3.14.0'
+    implementation 'com.squareup.okhttp3:okhttp-android-support:3.13.1'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.12.1'
 
     // Retrofit
-    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
-    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.5.0'
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.5.0'
     implementation 'com.squareup.retrofit2:converter-moshi:2.4.0'
 
     // ThreeTen
-    implementation 'com.jakewharton.threetenabp:threetenabp:1.1.0'
+    implementation 'com.jakewharton.threetenabp:threetenabp:1.2.0'
 
     // Picasso
     implementation 'com.squareup.picasso:picasso:2.71828'
