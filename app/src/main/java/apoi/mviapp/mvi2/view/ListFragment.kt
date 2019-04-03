@@ -36,7 +36,6 @@ class ListFragment : Mvi2BaseFragment<ListEvent, ListState, ListAction, ListResu
         return ListView(inflater, container).also {
             view = it
         }.view
-
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

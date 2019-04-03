@@ -28,7 +28,7 @@ import io.reactivex.subjects.PublishSubject
 class ListView(
     inflater: LayoutInflater,
     parent: ViewGroup?
-): MviView<ListEvent, ListState> {
+) : MviView<ListEvent, ListState> {
 
     val view: View = inflater.inflate(R.layout.list_fragment, parent, false)
 
