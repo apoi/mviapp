@@ -7,6 +7,7 @@ import apoi.mviapp.API_ENDPOINT
 import apoi.mviapp.SHARED_PREFS
 import apoi.mviapp.network.Api
 import apoi.mviapp.network.InstantAdapter
+import apoi.mviapp.network.PhotoService
 import apoi.mviapp.store.MemoryStore
 import com.squareup.moshi.Moshi
 import dagger.Module
@@ -65,15 +66,16 @@ class ApplicationModule(private val application: Application) {
 
     @Provides
     @Singleton
-    internal fun provideApi(client: OkHttpClient, moshi: Moshi): Api {
-        val retrofit = Retrofit.Builder()
+    internal fun providePhotoService(client: OkHttpClient, moshi: Moshi): PhotoService {
+        val retrofitApi = Retrofit.Builder()
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .baseUrl(API_ENDPOINT)
             .client(client)
             .build()
+            .create(Api::class.java)
 
-        return retrofit.create(Api::class.java)
+        return PhotoService(retrofitApi)
     }
 
     @Provides

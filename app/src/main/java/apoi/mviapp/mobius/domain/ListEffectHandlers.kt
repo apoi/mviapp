@@ -3,8 +3,8 @@ package apoi.mviapp.mobius.domain
 import android.content.Context
 import android.content.Intent
 import android.widget.Toast
-import apoi.mviapp.network.Api
 import apoi.mviapp.network.ErrorMapper
+import apoi.mviapp.network.PhotoService
 import apoi.mviapp.photo.PHOTO
 import apoi.mviapp.photo.PhotoActivity
 import com.spotify.mobius.rx2.RxMobius
@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 class ListEffectHandlers @Inject constructor(
     private val context: Context,
-    private val api: Api
+    private val service: PhotoService
 ) {
 
     fun createHandler(): ObservableTransformer<ListEffect, ListEvent> {
@@ -45,7 +45,7 @@ class ListEffectHandlers @Inject constructor(
         return effects
             .subscribeOn(Schedulers.io())
             .flatMap {
-                api.getPhotos()
+                service.getPhotos()
                     .toObservable()
                     .map<ListEvent> { ItemLoadSuccess(it) }
                     .onErrorReturn {

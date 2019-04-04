@@ -7,7 +7,7 @@ import apoi.mviapp.common.ListEvent
 import apoi.mviapp.common.ListResult
 import apoi.mviapp.common.ListState
 import apoi.mviapp.mvi2.arch.ViewModel
-import apoi.mviapp.network.Api
+import apoi.mviapp.network.PhotoService
 import apoi.mviapp.photo.PHOTO
 import apoi.mviapp.photo.PhotoActivity
 import io.reactivex.Observable
@@ -17,7 +17,7 @@ import timber.log.Timber
 
 class ListViewModel(
     private val context: Context,
-    private val api: Api
+    private val service: PhotoService
 ) : ViewModel<ListEvent, ListState, ListAction, ListResult>() {
 
     override fun initialState(): ListState = ListState()
@@ -42,7 +42,7 @@ class ListViewModel(
 
                     shared.ofType(ListAction.LoadContent::class.java)
                         .doOnNext { Timber.w("Load") }
-                        .flatMap { api.getPhotos().toObservable() }
+                        .flatMap { service.getPhotos().toObservable() }
                         .doOnNext { Timber.w("Result $it") }
                         .map<ListResult> { ListResult.ItemLoadSuccess(it) }
                         .onErrorReturn { ListResult.ItemLoadError(it.toString()) },
