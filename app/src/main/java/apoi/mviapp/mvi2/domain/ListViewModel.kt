@@ -20,7 +20,7 @@ class ListViewModel(
     private val api: Api
 ) : ViewModel<ListEvent, ListState, ListAction, ListResult>() {
 
-    override fun initialState(): ListState = ListState()
+    override fun initialState(): ListState = state().value ?: ListState()
 
     override fun eventFilter(): ObservableTransformer<ListEvent, ListEvent> {
         return ObservableTransformer { events -> events }

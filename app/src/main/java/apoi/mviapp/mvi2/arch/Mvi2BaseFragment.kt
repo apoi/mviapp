@@ -16,6 +16,9 @@ abstract class Mvi2BaseFragment<E : Event, S : State, A : Action, R : Result>
     protected val disposables = CompositeDisposable()
 
     protected fun bindToViewModel(view: Mvi2View<E, S>) {
+        viewModel.initialState()
+            .also(view::render)
+
         viewModel.processEvents(view.events)
             .also { disposables.add(it) }
 

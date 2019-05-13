@@ -1,5 +1,7 @@
 package apoi.mviapp.mvi2.arch
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import apoi.mviapp.common.*
 import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
@@ -11,14 +13,16 @@ import io.reactivex.schedulers.Schedulers
 abstract class ViewModel<E : Event, S : State, A : Action, R : Result> : androidx.lifecycle.ViewModel() {
 
     private val relay: PublishRelay<E> = PublishRelay.create()
+    private val state: MutableLiveData<S> = MutableLiveData()
 
     fun states(): Observable<S> {
         return relay.compose(eventFilter())
-            .observeOn(Schedulers.io())
+            .observeOn(Schedulers.computation())
             .map(this::actionFromEvent)
             .filter { action -> action !is ListAction.Initial }
             .compose(results())
             .scan(initialState(), reducer())
+            .doOnNext { state.postValue(it) }
             .replay(1)
             .autoConnect(0)
     }
@@ -26,6 +30,8 @@ abstract class ViewModel<E : Event, S : State, A : Action, R : Result> : android
     fun processEvents(events: Observable<E>): Disposable {
         return events.subscribe(relay)
     }
+
+    fun state(): LiveData<S> = state
 
     abstract fun initialState(): S
 
