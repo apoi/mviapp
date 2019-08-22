@@ -46,11 +46,12 @@ class ListViewModel(
                             api.getPhotos()
                                 .toObservable()
                                 .map<ListResult> { ListResult.ItemLoadSuccess(it) }
+                                .onErrorReturn { ListResult.ItemLoadError(it.toString()) }
+                                // Add finishing progress as additional emit, start with partial progress
                                 .flatMapIterable { listOf(it, ListResult.ItemLoadProgress(1f)) }
                                 .startWith(ListResult.ItemLoadProgress(0.5f))
                         }
-                        .doOnNext { Timber.w("Result $it") }
-                        .onErrorReturn { ListResult.ItemLoadError(it.toString()) },
+                        .doOnNext { Timber.w("Result $it") },
 
                     shared.ofType(ListAction.ShowPhoto::class.java)
                         .doOnNext { Timber.w("Photo") }
@@ -70,8 +71,8 @@ class ListViewModel(
             when (result) {
                 is ListResult.NoChange -> previousState
                 is ListResult.ItemLoadProgress -> previousState.copy(inProgress = result.progress < 1f)
-                is ListResult.ItemLoadSuccess -> previousState.copy(photos = result.photos, inProgress = false)
-                is ListResult.ItemLoadError -> previousState.copy(inProgress = false)
+                is ListResult.ItemLoadSuccess -> previousState.copy(photos = result.photos)
+                is ListResult.ItemLoadError -> previousState
             }
         }
     }
