@@ -9,12 +9,14 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import apoi.mviapp.R
 import apoi.mviapp.common.ListState
 import apoi.mviapp.extensions.setVisibility
 import apoi.mviapp.mobius.domain.ListEvent
 import apoi.mviapp.mobius.domain.LoadButtonClicked
 import apoi.mviapp.mobius.domain.PhotoClicked
+import apoi.mviapp.mobius.domain.PullToRefresh
 import apoi.mviapp.photo.PhotoAdapter
 import com.spotify.mobius.Connectable
 import com.spotify.mobius.Connection
@@ -27,9 +29,9 @@ class ListView(
 
     val view: View = inflater.inflate(R.layout.list_fragment, parent, false)
 
-    private val progressBar = view.findViewById<ProgressBar>(R.id.progress_bar)
     private val loadButton = view.findViewById<Button>(R.id.load_button)
     private val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view)
+    private val swipeLayout = view.findViewById<SwipeRefreshLayout>(R.id.swipe_layout)
 
     private lateinit var photoAdapter: PhotoAdapter
 
@@ -64,6 +66,7 @@ class ListView(
 
     private fun setListeners(output: Consumer<ListEvent>) {
         loadButton.setOnClickListener { output.accept(LoadButtonClicked()) }
+        swipeLayout.setOnRefreshListener { output.accept(PullToRefresh()) }
     }
 
     private fun clearListeners() {
@@ -71,7 +74,7 @@ class ListView(
     }
 
     fun render(value: ListState) {
-        progressBar.setVisibility(value.inProgress)
+        swipeLayout.isRefreshing = value.inProgress
         loadButton.setVisibility(!value.inProgress && value.photos.isEmpty())
         recyclerView.setVisibility(!value.inProgress && value.photos.isNotEmpty())
 

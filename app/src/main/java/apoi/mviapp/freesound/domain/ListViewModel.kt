@@ -28,6 +28,7 @@ class ListViewModel(
             when (event) {
                 is ListEvent.Initial -> ListAction.Initial
                 is ListEvent.LoadButtonClicked -> ListAction.LoadContent
+                is ListEvent.PullToRefresh -> ListAction.LoadContent
                 is ListEvent.PhotoClicked -> ListAction.ShowPhoto(event.photo)
             }
         }

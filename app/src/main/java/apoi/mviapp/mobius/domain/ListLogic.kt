@@ -10,7 +10,7 @@ class ListLogic {
     fun createUpdate(): Update<ListState, ListEvent, ListEffect> {
         return Update { model, event ->
             when (event) {
-                is LoadButtonClicked -> {
+                is LoadButtonClicked, is PullToRefresh -> {
                     Next.next(
                         model.copy(inProgress = true),
                         Effects.effects(

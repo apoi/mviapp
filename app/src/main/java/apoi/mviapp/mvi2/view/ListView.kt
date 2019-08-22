@@ -4,11 +4,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.ProgressBar
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import apoi.mviapp.R
 import apoi.mviapp.common.ListEvent
 import apoi.mviapp.common.ListState
@@ -16,6 +16,7 @@ import apoi.mviapp.extensions.setVisibility
 import apoi.mviapp.mvi2.arch.Mvi2View
 import apoi.mviapp.photo.PhotoAdapter
 import apoi.mviapp.pojo.Photo
+import com.jakewharton.rxbinding2.support.v4.widget.refreshes
 import com.jakewharton.rxbinding2.view.clicks
 import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
@@ -28,9 +29,9 @@ class ListView(
 
     val view: View = inflater.inflate(R.layout.list_fragment, parent, false)
 
-    private val progressBar = view.findViewById<ProgressBar>(R.id.progress_bar)
     private val loadButton = view.findViewById<Button>(R.id.load_button)
     private val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view)
+    private val swipeLayout = view.findViewById<SwipeRefreshLayout>(R.id.swipe_layout)
 
     private val photoClickedSubject = PublishSubject.create<Photo>()
     private val photoAdapter: PhotoAdapter = PhotoAdapter(photoClickedSubject::onNext)
@@ -50,12 +51,17 @@ class ListView(
     }
 
     override val events: Observable<ListEvent> by lazy {
-        Observable.merge(onInitialisedEvent, loadClickedStream(), photoClickedStream())
+        Observable.merge(onInitialisedEvent, loadClickedStream(), pullToRefreshStream(), photoClickedStream())
     }
 
     private fun loadClickedStream(): Observable<ListEvent.LoadButtonClicked> {
         return loadButton.clicks()
             .map { ListEvent.LoadButtonClicked }
+    }
+
+    private fun pullToRefreshStream(): Observable<ListEvent.PullToRefresh> {
+        return swipeLayout.refreshes()
+            .map { ListEvent.PullToRefresh }
     }
 
     private fun photoClickedStream(): Observable<ListEvent.PhotoClicked> {
@@ -64,7 +70,7 @@ class ListView(
     }
 
     override fun render(state: ListState) {
-        progressBar.setVisibility(state.inProgress)
+        swipeLayout.isRefreshing = state.inProgress
         loadButton.setVisibility(!state.inProgress && state.photos.isEmpty())
         recyclerView.setVisibility(!state.inProgress && state.photos.isNotEmpty())
 
