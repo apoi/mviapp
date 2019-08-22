@@ -42,9 +42,14 @@ class ListViewModel(
 
                     shared.ofType(ListAction.LoadContent::class.java)
                         .doOnNext { Timber.w("Load") }
-                        .flatMap { api.getPhotos().toObservable() }
+                        .flatMap {
+                            api.getPhotos()
+                                .toObservable()
+                                .map<ListResult> { ListResult.ItemLoadSuccess(it) }
+                                .flatMapIterable { listOf(it, ListResult.ItemLoadProgress(1f)) }
+                                .startWith(ListResult.ItemLoadProgress(0.5f))
+                        }
                         .doOnNext { Timber.w("Result $it") }
-                        .map<ListResult> { ListResult.ItemLoadSuccess(it) }
                         .onErrorReturn { ListResult.ItemLoadError(it.toString()) },
 
                     shared.ofType(ListAction.ShowPhoto::class.java)
@@ -64,7 +69,8 @@ class ListViewModel(
         return BiFunction { previousState: ListState, result: ListResult ->
             when (result) {
                 is ListResult.NoChange -> previousState
-                is ListResult.ItemLoadSuccess -> previousState.copy(inProgress = false, photos = result.photos)
+                is ListResult.ItemLoadProgress -> previousState.copy(inProgress = result.progress < 1f)
+                is ListResult.ItemLoadSuccess -> previousState.copy(photos = result.photos, inProgress = false)
                 is ListResult.ItemLoadError -> previousState.copy(inProgress = false)
             }
         }

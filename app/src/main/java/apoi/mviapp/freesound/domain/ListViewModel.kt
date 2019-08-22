@@ -39,8 +39,13 @@ class ListViewModel(
         },
         Dispatcher {
             it.ofType(ListAction.LoadContent::class.java)
-                .flatMap { api.getPhotos().toFlowable() }
-                .map<ListResult> { ListResult.ItemLoadSuccess(it) }
+                .flatMap {
+                    api.getPhotos()
+                        .toFlowable()
+                        .map<ListResult> { ListResult.ItemLoadSuccess(it) }
+                        .flatMapIterable { listOf(it, ListResult.ItemLoadProgress(1f)) }
+                        .startWith(ListResult.ItemLoadProgress(0.5f))
+                }
                 .onErrorReturn { ListResult.ItemLoadError("Error!") }
         },
         Dispatcher {
@@ -57,8 +62,12 @@ class ListViewModel(
         { current: ListState, result: ListResult ->
             when (result) {
                 is ListResult.NoChange -> current
-                is ListResult.ItemLoadSuccess -> current.copy(photos = result.photos)
-                is ListResult.ItemLoadError -> current
+                is ListResult.ItemLoadProgress ->
+                    current.copy(inProgress = result.progress < 1f)
+                is ListResult.ItemLoadSuccess ->
+                    current.copy(photos = result.photos, inProgress = false)
+                is ListResult.ItemLoadError ->
+                    current.copy(inProgress = false)
             }
         }
 
