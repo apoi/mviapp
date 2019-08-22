@@ -39,7 +39,7 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha3'
 
     // Ktlint
-    ktlint "com.github.shyiko:ktlint:0.30.0"
+    ktlint "com.pinterest:ktlint:0.34.2"
 
     // KTX
     implementation 'androidx.core:core-ktx:1.0.1'
@@ -94,4 +94,22 @@ dependencies {
 
     // Timber
     implementation 'com.jakewharton.timber:timber:4.7.1'
+}
+
+task ktlint(type: JavaExec, group: "verification") {
+    description = "Check Kotlin code style."
+    classpath = configurations.ktlint
+    main = "com.pinterest.ktlint.Main"
+    args "src/**/*.kt"
+    // to generate report in checkstyle format prepend following args:
+    // "--reporter=plain", "--reporter=checkstyle,output=${buildDir}/ktlint.xml"
+    // see https://github.com/pinterest/ktlint#usage for more
+}
+check.dependsOn ktlint
+
+task ktlintFormat(type: JavaExec, group: "formatting") {
+    description = "Fix Kotlin code style deviations."
+    classpath = configurations.ktlint
+    main = "com.pinterest.ktlint.Main"
+    args "-F", "src/**/*.kt"
 }
