@@ -40,7 +40,7 @@ class ListViewModel(
         },
         Dispatcher {
             it.ofType(ListAction.LoadContent::class.java)
-                .flatMap {
+                .switchMap {
                     api.getPhotos()
                         .toFlowable()
                         .map<ListResult> { ListResult.ItemLoadSuccess(it) }

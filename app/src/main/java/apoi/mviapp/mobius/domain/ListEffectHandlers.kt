@@ -44,7 +44,7 @@ class ListEffectHandlers @Inject constructor(
     private fun handleLoadItems(effects: Observable<LoadItems>): Observable<ListEvent> {
         return effects
             .subscribeOn(Schedulers.io())
-            .flatMap {
+            .switchMap {
                 api.getPhotos()
                     .toObservable()
                     .map<ListEvent> { ItemLoadSuccess(it) }

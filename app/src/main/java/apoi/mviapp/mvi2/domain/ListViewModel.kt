@@ -43,7 +43,7 @@ class ListViewModel(
 
                     shared.ofType(ListAction.LoadContent::class.java)
                         .doOnNext { Timber.w("Load") }
-                        .flatMap {
+                        .switchMap {
                             api.getPhotos()
                                 .toObservable()
                                 .map<ListResult> { ListResult.ItemLoadSuccess(it) }
