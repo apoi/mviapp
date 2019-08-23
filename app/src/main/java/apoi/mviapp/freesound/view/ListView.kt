@@ -86,12 +86,11 @@ class ListView(
         recyclerView.setVisibility(!state.inProgress && state.photos.isNotEmpty())
 
         state.error?.let {
-            snackbar = Snackbar.make(swipeLayout, it, Snackbar.LENGTH_INDEFINITE).also {
-                it.show()
-            }
-        }.ifNull {
-            snackbar?.dismiss()
-        }
+            if (snackbar?.isShown != true)
+                snackbar = Snackbar.make(swipeLayout, it, Snackbar.LENGTH_INDEFINITE).also {
+                    it.show()
+                }
+        }.ifNull { snackbar?.dismiss() }
 
         photoAdapter.setPhotos(state.photos)
     }

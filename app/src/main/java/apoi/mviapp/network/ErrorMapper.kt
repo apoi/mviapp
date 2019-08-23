@@ -6,6 +6,7 @@ import retrofit2.HttpException
 import timber.log.Timber
 import java.net.SocketException
 import java.net.SocketTimeoutException
+import java.net.UnknownHostException
 
 open class ErrorMapper(private val context: Context, private val cause: Throwable?) {
 
@@ -23,6 +24,7 @@ open class ErrorMapper(private val context: Context, private val cause: Throwabl
 
     private fun isNetworkException(throwable: Throwable?): Boolean {
         return throwable is SocketException ||
-            throwable is SocketTimeoutException
+            throwable is SocketTimeoutException ||
+            throwable is UnknownHostException
     }
 }

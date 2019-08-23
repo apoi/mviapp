@@ -12,10 +12,12 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import apoi.mviapp.R
 import apoi.mviapp.common.ListEvent
 import apoi.mviapp.common.ListState
+import apoi.mviapp.extensions.ifNull
 import apoi.mviapp.extensions.setVisibility
 import apoi.mviapp.mvi2.arch.Mvi2View
 import apoi.mviapp.photo.PhotoAdapter
 import apoi.mviapp.pojo.Photo
+import com.google.android.material.snackbar.Snackbar
 import com.jakewharton.rxbinding2.support.v4.widget.refreshes
 import com.jakewharton.rxbinding2.view.clicks
 import com.jakewharton.rxrelay2.PublishRelay
@@ -25,13 +27,14 @@ import io.reactivex.subjects.PublishSubject
 class ListView(
     inflater: LayoutInflater,
     parent: ViewGroup?
-): Mvi2View<ListEvent, ListState> {
+) : Mvi2View<ListEvent, ListState> {
 
     val view: View = inflater.inflate(R.layout.list_fragment, parent, false)
 
     private val loadButton = view.findViewById<Button>(R.id.load_button)
     private val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view)
     private val swipeLayout = view.findViewById<SwipeRefreshLayout>(R.id.swipe_layout)
+    private var snackbar: Snackbar? = null
 
     private val photoClickedSubject = PublishSubject.create<Photo>()
     private val photoAdapter: PhotoAdapter = PhotoAdapter(photoClickedSubject::onNext)
@@ -73,6 +76,13 @@ class ListView(
         swipeLayout.isRefreshing = state.inProgress
         loadButton.setVisibility(!state.inProgress && state.photos.isEmpty())
         recyclerView.setVisibility(!state.inProgress && state.photos.isNotEmpty())
+
+        state.error?.let {
+            if (snackbar?.isShown != true)
+                snackbar = Snackbar.make(swipeLayout, it, Snackbar.LENGTH_INDEFINITE).also {
+                    it.show()
+                }
+        }.ifNull { snackbar?.dismiss() }
 
         photoAdapter.setPhotos(state.photos)
     }

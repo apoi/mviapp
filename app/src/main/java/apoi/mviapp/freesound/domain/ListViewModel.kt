@@ -13,12 +13,11 @@ import apoi.mviapp.freesound.arch.Reducer
 import apoi.mviapp.freesound.arch.combine
 import apoi.mviapp.freesound.arch.store.Store
 import apoi.mviapp.freesound.arch.viewmodel.BaseViewModel
-import apoi.mviapp.network.Api
+import apoi.mviapp.network.ErrorMapper
 import apoi.mviapp.network.PhotoService
 import apoi.mviapp.photo.PHOTO
 import apoi.mviapp.photo.PhotoActivity
 import io.reactivex.Flowable
-import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 class ListViewModel(
@@ -52,7 +51,7 @@ class ListViewModel(
                         .onErrorResumeNext { error: Throwable ->
                             Flowable.timer(Constants.ERROR_SHOW_DURATION, TimeUnit.SECONDS)
                                 .map<ListResult> { ListResult.ItemLoadErrorClear }
-                                .startWith(ListResult.ItemLoadErrorShow(error.toString()))
+                                .startWith(ListResult.ItemLoadErrorShow(error))
                         }
                         // Add finishing progress as additional emit, start with partial progress
                         .flatMapIterable { listOf(it, ListResult.ItemLoadProgress(1f)) }
@@ -75,7 +74,7 @@ class ListViewModel(
                 is ListResult.NoChange -> current
                 is ListResult.ItemLoadProgress -> current.copy(inProgress = result.progress < 1f)
                 is ListResult.ItemLoadSuccess -> current.copy(photos = result.photos)
-                is ListResult.ItemLoadErrorShow -> current.copy(error = result.error)
+                is ListResult.ItemLoadErrorShow -> current.copy(error = ErrorMapper(context, result.error).errorToMessage())
                 is ListResult.ItemLoadErrorClear -> current.copy(error = null)
             }
         }
