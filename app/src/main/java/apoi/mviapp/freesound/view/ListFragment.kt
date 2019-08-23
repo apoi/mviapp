@@ -12,18 +12,19 @@ import apoi.mviapp.freesound.arch.viewmodel.ViewModel
 import apoi.mviapp.extensions.viewModelProvider
 import apoi.mviapp.freesound.domain.ListViewModel
 import apoi.mviapp.network.Api
+import apoi.mviapp.network.PhotoService
 import javax.inject.Inject
 
 class ListFragment : MviBaseFragment<ListState, ListEvent, ViewModel<ListEvent, ListState>>() {
 
     @Inject
-    lateinit var api: Api
+    lateinit var service: PhotoService
 
     private lateinit var view: ListView
 
     override val viewModel: ViewModel<ListEvent, ListState> by lazy {
         this.viewModelProvider {
-            ListViewModel(requireContext(), api)
+            ListViewModel(requireContext(), service)
         }
     }
 

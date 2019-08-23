@@ -2,6 +2,7 @@ package apoi.mviapp.freesound.domain
 
 import android.content.Context
 import android.content.Intent
+import apoi.mviapp.common.Constants
 import apoi.mviapp.common.ListAction
 import apoi.mviapp.common.ListEvent
 import apoi.mviapp.common.ListResult
@@ -13,14 +14,16 @@ import apoi.mviapp.freesound.arch.combine
 import apoi.mviapp.freesound.arch.store.Store
 import apoi.mviapp.freesound.arch.viewmodel.BaseViewModel
 import apoi.mviapp.network.Api
+import apoi.mviapp.network.PhotoService
 import apoi.mviapp.photo.PHOTO
 import apoi.mviapp.photo.PhotoActivity
 import io.reactivex.Flowable
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 class ListViewModel(
     context: Context,
-    api: Api
+    service: PhotoService
 ) : BaseViewModel<ListEvent, ListAction, ListResult, ListState>() {
 
     override val initialEvent = ListEvent.Initial
@@ -43,13 +46,13 @@ class ListViewModel(
         Dispatcher {
             it.ofType(ListAction.LoadContent::class.java)
                 .switchMap {
-                    api.getPhotos()
+                    service.getPhotos()
                         .toFlowable()
                         .map<ListResult> { ListResult.ItemLoadSuccess(it) }
                         .onErrorResumeNext { error: Throwable ->
-                            Flowable.timer(2, TimeUnit.SECONDS)
-                                .map { ListResult.ItemLoadErrorClear }
-                                .startWith { ListResult.ItemLoadErrorShow(error.toString()) }
+                            Flowable.timer(Constants.ERROR_SHOW_DURATION, TimeUnit.SECONDS)
+                                .map<ListResult> { ListResult.ItemLoadErrorClear }
+                                .startWith(ListResult.ItemLoadErrorShow(error.toString()))
                         }
                         // Add finishing progress as additional emit, start with partial progress
                         .flatMapIterable { listOf(it, ListResult.ItemLoadProgress(1f)) }
