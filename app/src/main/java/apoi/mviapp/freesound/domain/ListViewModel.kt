@@ -15,6 +15,8 @@ import apoi.mviapp.freesound.arch.viewmodel.BaseViewModel
 import apoi.mviapp.network.Api
 import apoi.mviapp.photo.PHOTO
 import apoi.mviapp.photo.PhotoActivity
+import io.reactivex.Flowable
+import java.util.concurrent.TimeUnit
 
 class ListViewModel(
     context: Context,
@@ -44,7 +46,11 @@ class ListViewModel(
                     api.getPhotos()
                         .toFlowable()
                         .map<ListResult> { ListResult.ItemLoadSuccess(it) }
-                        .onErrorReturn { ListResult.ItemLoadError(it.toString()) }
+                        .onErrorResumeNext { error: Throwable ->
+                            Flowable.timer(2, TimeUnit.SECONDS)
+                                .map { ListResult.ItemLoadErrorClear }
+                                .startWith { ListResult.ItemLoadErrorShow(error.toString()) }
+                        }
                         // Add finishing progress as additional emit, start with partial progress
                         .flatMapIterable { listOf(it, ListResult.ItemLoadProgress(1f)) }
                         .startWith(ListResult.ItemLoadProgress(0.5f))
@@ -66,7 +72,8 @@ class ListViewModel(
                 is ListResult.NoChange -> current
                 is ListResult.ItemLoadProgress -> current.copy(inProgress = result.progress < 1f)
                 is ListResult.ItemLoadSuccess -> current.copy(photos = result.photos)
-                is ListResult.ItemLoadError -> current
+                is ListResult.ItemLoadErrorShow -> current.copy(error = result.error)
+                is ListResult.ItemLoadErrorClear -> current.copy(error = null)
             }
         }
 

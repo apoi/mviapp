@@ -17,10 +17,12 @@ import apoi.mviapp.common.ListEvent.LoadButtonClicked
 import apoi.mviapp.common.ListEvent.PhotoClicked
 import apoi.mviapp.common.ListEvent.PullToRefresh
 import apoi.mviapp.common.ListState
+import apoi.mviapp.extensions.ifNull
 import apoi.mviapp.extensions.setVisibility
 import apoi.mviapp.freesound.arch.view.MviView
 import apoi.mviapp.photo.PhotoAdapter
 import apoi.mviapp.pojo.Photo
+import com.google.android.material.snackbar.Snackbar
 import com.jakewharton.rxbinding2.support.v4.widget.refreshes
 import com.jakewharton.rxbinding2.view.clicks
 import io.reactivex.BackpressureStrategy
@@ -37,6 +39,7 @@ class ListView(
     private val loadButton = view.findViewById<Button>(R.id.load_button)
     private val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view)
     private val swipeLayout = view.findViewById<SwipeRefreshLayout>(R.id.swipe_layout)
+    private var snackbar: Snackbar? = null
 
     private val photoClickedSubject = PublishSubject.create<Photo>()
     private val photoAdapter: PhotoAdapter = PhotoAdapter(photoClickedSubject::onNext)
@@ -81,6 +84,14 @@ class ListView(
         swipeLayout.isRefreshing = state.inProgress
         loadButton.setVisibility(!state.inProgress && state.photos.isEmpty())
         recyclerView.setVisibility(!state.inProgress && state.photos.isNotEmpty())
+
+        state.error?.let {
+            snackbar = Snackbar.make(swipeLayout, it, Snackbar.LENGTH_INDEFINITE).also {
+                it.show()
+            }
+        }.ifNull {
+            snackbar?.dismiss()
+        }
 
         photoAdapter.setPhotos(state.photos)
     }

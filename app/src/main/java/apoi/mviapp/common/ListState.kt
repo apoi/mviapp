@@ -6,6 +6,7 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class ListState(
+    val photos: List<Photo> = emptyList(),
     val inProgress: Boolean = false,
-    val photos: List<Photo> = emptyList()
+    val error: String? = null
 ) : State, Parcelable
